@@ -27,6 +27,10 @@
         <activity android:name=".Homenew.HomeNew" />
         <activity android:name=".Mood.Facebook" />
         <activity android:name=".credit_page" />
+        <activity android:name=".ApiRegistration"/>
+        <activity android:name=".resetPasswordActivity"/>
+        <activity android:name=".newResetPassword"/>
+
     </application>
 
 </manifest>

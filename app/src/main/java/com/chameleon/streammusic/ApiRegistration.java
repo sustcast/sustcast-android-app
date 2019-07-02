@@ -65,6 +65,11 @@ public class ApiRegistration extends AppCompatActivity {
                     spinner.setVisibility(View.VISIBLE);
                     startRegistration(name, email, password, cpassword, registration_number, contact, department);
                 }
+
+                else {
+                    Toast.makeText(ApiRegistration.this, "Field empty", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
