@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Radio Meow</string>
+    <string name="tagline">Voice of SUST</string>
+
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+</resources>

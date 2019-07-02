@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/ic_house"
+        android:icon="@drawable/ic_house"
+        android:title="Home">
+
+
+    </item>
+    <item
+        android:id="@+id/ic_search"
+        android:icon="@drawable/logo_rj"
+        android:title="RJ">
+
+
+    </item>
+    <item
+        android:id="@+id/ic_heart"
+        android:icon="@drawable/happy"
+        android:title="Feedback">
+
+
+    </item>
+    <item
+        android:id="@+id/ic_playlist"
+        android:icon="@drawable/logo_fb"
+        android:title="Facebook">
+
+    </item>
+
+    <item
+        android:id="@+id/ic_logout"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:title="Logout">
+
+    </item>
+
+
+
+
+</menu>
