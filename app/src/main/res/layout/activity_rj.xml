@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chameleon.streammusic.Search.RJ"
-    android:background="@drawable/back2"
-    android:id="@+id/chatlayout"
-    >
+    android:background="@drawable/back2">
 
 
     <ScrollView

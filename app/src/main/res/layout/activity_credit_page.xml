@@ -22,7 +22,6 @@
                 android:layout_height="fill_parent"
                 android:stretchColumns="1">
             <TableRow
-                android:id="@+id/TextT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <TextView
@@ -57,7 +56,7 @@
                             android:layout_height="200dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/jannat" />
+                            app:srcCompat="@drawable/jannat" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -100,7 +99,7 @@
                                 android:layout_height="200dp"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/shuhan" />
+                                app:srcCompat="@drawable/shuhan" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -143,7 +142,7 @@
                                 android:layout_height="200dp"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/nazia" />
+                                app:srcCompat="@drawable/nazia" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -187,7 +186,7 @@
                                 android:layout_height="200dp"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/shihab" />
+                                app:srcCompat="@drawable/shihab" />
 
                             <TextView
                                 android:layout_width="wrap_content"

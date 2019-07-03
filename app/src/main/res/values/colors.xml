@@ -6,23 +6,8 @@
     <color name="grey">#bfbfbf</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="bluelight">#05c3f9</color>
-    <color name="bluedark">#0691b8</color>
     <color name="themeColor">#00B3FF</color>
     <color name="darkColor">#003754</color>
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorGrapeFruitDark">#da4453</color>
-    <color name="colorFlower">#ffce54</color>
-    <color name="colorGrass">#a0d468</color>
-    <color name="colorBlueJeans">#509cec</color>
-    <color name="colorLavender">#2b2342</color>
-    <color name="colorAqua">#be635e</color>
-    <color name="colorAquaDark">#3bafda</color>
-    <color name="colorRipple">#BFA9A9F5</color>
-    <color name="colorBegun">#944b78</color>
-    <color name="colorPeyaj">#b84b72</color>
-    <color name="colorMishti">#e56a6d</color>
     <color name="colorGrey">#D3D3D3</color>
-    <color name="colorTeal">#CB008080</color>
 
 </resources>
