@@ -11,8 +11,19 @@
         android:layout_height="match_parent">
 
         <!-- top toolbar -->
+        <RelativeLayout
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relLayout1">
+
+            <include layout="@layout/layout_center_viewpager" />
+
+
+        </RelativeLayout>
+
         <Button
-            android:id="@+id/buttonLogout"
+            android:id="@+id/buttonChat"
             android:layout_width="59dp"
             android:layout_height="wrap_content"
 
@@ -21,13 +32,13 @@
             android:layout_alignBottom="@+id/relLayout2"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="352dp"
-            android:layout_marginLeft="352dp"
+            android:layout_marginStart="231dp"
+            android:layout_marginLeft="231dp"
             android:layout_marginTop="318dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_marginEnd="122dp"
+            android:layout_marginRight="122dp"
             android:layout_marginBottom="5dp"
-            android:background="@android:color/transparent"
+            android:background="@color/colorRipple"
             android:visibility="visible" />
 
         <RelativeLayout
@@ -42,10 +53,11 @@
         <!-- middle section (body) -->
 
         <RelativeLayout
-            android:id="@+id/relLayout2"
+            android:id="@+id/relLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/relLayout1">
+            android:layout_below="@+id/relLayout1"
+            android:layout_marginTop="0dp">
 
             <include layout="@layout/layout_center_viewpager" />
 
@@ -53,6 +65,22 @@
         </RelativeLayout>
 
         <!-- bottom navigation -->
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="59dp"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/relLayout3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="231dp"
+            android:layout_marginLeft="231dp"
+            android:layout_marginTop="318dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/colorTeal"
+            android:visibility="visible" />
+
         <include layout = "@layout/layout_bottom_navigation_view"/>
 
 

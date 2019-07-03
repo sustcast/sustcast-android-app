@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.chameleon.streammusic.ApiLogin;
+import com.chameleon.streammusic.ChatActvity;
 import com.chameleon.streammusic.R;
 import com.chameleon.streammusic.Utils.BottomNavigationViewHelper;
 import com.chameleon.streammusic.data.model.logoutResponse;
@@ -33,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Context mContext = HomeActivity.this;
     private Button mLogout;
+    private Button mChat;
     private UserClient mAPIService;
     private String token;
 
@@ -41,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mLogout = (Button) findViewById(R.id.buttonLogout);
+        mChat = (Button) findViewById(R.id.buttonChat);
 
         mAPIService = ApiUtils.getAPIService();
         token = getIntent().getStringExtra("token");
@@ -54,7 +57,18 @@ public class HomeActivity extends AppCompatActivity {
                     logout();
             }
         });
+        mChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startChat();
+            }
+        });
 
+    }
+
+    private void startChat() {
+        Intent intent = new Intent(HomeActivity.this, ChatActvity.class);
+        startActivity(intent);
     }
 
     private void logout() {
@@ -62,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<logoutResponse> call, Response<logoutResponse> response) {
                 System.out.println("Response code =>" + response.code());
+                Log.i("MY: ","LOGOUT CLICKED");
                 if (response.isSuccessful()){
                     Toast.makeText(HomeActivity.this, "Response Successful!! in general page", Toast.LENGTH_SHORT).show();
                     //spinner.setVisibility(View.GONE);
