@@ -46,8 +46,8 @@ public class BottomNavigationViewHelper {
 
                         break;
                     case R.id.ic_heart:
-                        Intent intent3 = new Intent(context, feedback.class);
-                        context.startActivity(intent3);
+                        /*Intent intent3 = new Intent(context, feedback.class);
+                        context.startActivity(intent3);*/
                         //Snackbar.make(view, "Feature Under Construction", Snackbar.LENGTH_LONG)
                           //      .setAction("Action", null).show();
                         break;
