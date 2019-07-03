@@ -44,7 +44,7 @@ public class ApiRegistration extends AppCompatActivity {
         mCpasswordEntry = (EditText) findViewById(R.id.entryCpassword);
         mContact = (EditText) findViewById(R.id.entryContact);
         mRegNo = (EditText) findViewById(R.id.entryRegNo);
-        mDept = (EditText) findViewById(R.id.entryDept);
+        mDept = (EditText) findViewById(R.id.entryDept1);
 
         mAPIService = ApiUtils.getAPIService();
         mTestButton = (Button) findViewById(R.id.testButton);

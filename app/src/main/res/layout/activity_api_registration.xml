@@ -4,18 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_blue"
+    android:background="@drawable/background_cassete"
     >
 
+    <ImageView
+        android:id="@+id/Image1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:paddingTop="20dp"
+        android:src="@drawable/radiomeow1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <android.support.design.widget.TextInputLayout
         android:id="@+id/sdfasdf"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:hint="Confirm Password"
-        android:textColorHint="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,54 +37,55 @@
             android:id="@+id/entryCpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:padding="15dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorGrey" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
     </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/entryDept"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Department"
-        android:inputType="textPersonName"
-        android:padding="15dp"
-        android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorGrey"
+        android:hint="Department (ex: CSE, EEE, MAT)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
+        <EditText
+            android:id="@+id/entryDept1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
+    </android.support.design.widget.TextInputLayout>
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="Please Fill in this Form to Register"
-        android:textColor="@color/colorWhite"
-        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.579"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/Image1" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/xoxo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:hint="Full name"
-        android:textColorHint="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,16 +100,14 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="15dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorGrey"
-            />
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorGrey" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/text34"
         android:layout_width="match_parent"
-        android:layout_height="82dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Contact Number"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,14 +118,12 @@
         <EditText
             android:id="@+id/entryContact"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Contact Number"
             android:inputType="numberDecimal"
-            android:padding="15dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/black"
             android:textColorHint="@color/colorGrey" />
 
     </android.support.design.widget.TextInputLayout>
@@ -137,11 +146,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Email Address"
             android:inputType="textEmailAddress"
-            android:padding="15dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorGrey" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -150,7 +157,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Password"
-        android:textColorHint="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -164,18 +170,15 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:padding="15dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorGrey" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:hint="Registration Number"
-        android:textColorHint="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -184,13 +187,13 @@
         <EditText
             android:id="@+id/entryRegNo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number"
-            android:padding="25dp"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -198,11 +201,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/colorWhite"
+        android:backgroundTint="@color/themeColor"
         android:text="Register"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text34" />
 
@@ -215,10 +220,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/testButton"
-        app:layout_constraintEnd_toEndOf="@+id/sdfasdf"
-        app:layout_constraintStart_toStartOf="@+id/sdfasdf"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
