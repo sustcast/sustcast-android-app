@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_cassete"
-    >
+    android:background="@drawable/background_cassete">
 
     <ImageView
         android:id="@+id/Image1"
@@ -17,9 +16,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:paddingTop="20dp"
-        android:src="@drawable/radiomeow1"
+        app:srcCompat="@drawable/radiomeow1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/sdfasdf"
         android:layout_width="match_parent"
@@ -65,16 +65,17 @@
             android:textColor="@color/black"
             android:textColorHint="@color/grey" />
     </android.support.design.widget.TextInputLayout>
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:gravity="center"
         android:text="Please Fill in this Form to Register"
         android:textColor="@color/black"
         android:textSize="15dp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.579"
         app:layout_constraintStart_toStartOf="parent"
@@ -187,9 +188,9 @@
         <EditText
             android:id="@+id/entryRegNo"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number"
             android:textColor="@color/black"
@@ -212,7 +213,6 @@
         app:layout_constraintTop_toBottomOf="@+id/text34" />
 
     <ProgressBar
-        android:id="@+id/pBarreg"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="32dp"
         android:layout_height="43dp"
@@ -221,9 +221,9 @@
         android:layout_marginTop="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

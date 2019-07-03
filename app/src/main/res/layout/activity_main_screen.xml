@@ -27,7 +27,7 @@
             android:layout_width="400dp"
             android:layout_height="391dp"
             android:layout_gravity="center"
-            android:src="@drawable/radiomeow" />
+            app:srcCompat="@drawable/radiomeow" />
 
 
         <TextView

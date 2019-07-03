@@ -315,23 +315,6 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
 
     }
 
-    private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Currently Streaming");
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.d(TAG, "onMenuItemClick: clicked Menu item " + item);
-                switch (item.getItemId()){
-                    case R.id.profileMenu:
-                        Log.d(TAG, "onMenuItemClick: Navigating to Profile Preferences");
-                }
-                return false;
-            }
-        });
-    }
-
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);

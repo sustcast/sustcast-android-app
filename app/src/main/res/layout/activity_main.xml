@@ -23,7 +23,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:contentDescription="TODO"
-        android:src="@drawable/radiomeow1"
+        app:srcCompat="@drawable/radiomeow1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         card_view:cardBackgroundColor="#99ffffff"
         card_view:cardCornerRadius="4dp"
@@ -43,7 +43,6 @@
         tools:layout_editor_absoluteX="66dp">
 
         <LinearLayout
-            android:id="@+id/LoginCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/Card_login"
@@ -122,7 +121,6 @@
 
 
     <Button
-        android:id="@+id/buttonFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="10dp"
@@ -139,7 +137,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonGmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="10dp"
