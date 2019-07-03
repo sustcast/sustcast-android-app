@@ -38,7 +38,7 @@
             android:layout_marginEnd="122dp"
             android:layout_marginRight="122dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/colorRipple"
+            android:background="@color/darkColor"
             android:visibility="visible" />
 
         <RelativeLayout
@@ -78,7 +78,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="2dp"
-            android:background="@color/colorTeal"
+            android:background="@color/darkColor"
             android:visibility="visible" />
 
         <include layout = "@layout/layout_bottom_navigation_view"/>
