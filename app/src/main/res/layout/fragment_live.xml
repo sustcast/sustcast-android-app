@@ -25,7 +25,6 @@
             app:expandedTitleTextAppearance="@android:color/transparent">
 
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:title="food name"
@@ -68,7 +67,7 @@
                         android:padding="12dp"
                         android:layout_marginTop="8dp"
                         android:text="Feels Like We Only Go Backwards "
-                        android:textColor="#ffffff"
+                        android:textColor="#000"
                         android:textSize="20sp"
                         android:textStyle="bold"
 
@@ -92,12 +91,11 @@
                             android:layout_weight="9"
 
                             android:text="4:58"
-                            android:textColor="#ffffff"
+                            android:textColor="#000"
                             android:textSize="18sp"
                             android:textStyle="bold"
 
                             />
-
 
 
                     </LinearLayout>
@@ -117,7 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:text="Hype Beast"
-                android:textColor="#fff"
+                android:textColor="#000"
                 />
             <Button
 
@@ -128,7 +126,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:text="John Mayer"
-                android:textColor="#fff"
+                android:textColor="#000"
                 />
 
             <Button
@@ -140,23 +138,13 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittextstyle"
                 android:text="Cold Play"
-                android:textColor="#fff"
+                android:textColor="#000"
                 />
 
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        app:srcCompat="@drawable/ic_play_circle_outline_black_24dp"
-
-        app:pressedTranslationZ="12dp"
-        app:layout_anchor="@id/appbarlayout"
-        app:layout_anchorGravity="bottom|right|end"
-        app:useCompatPadding="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </android.support.design.widget.CoordinatorLayout>
