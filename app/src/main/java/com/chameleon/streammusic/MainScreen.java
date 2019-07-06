@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chameleon.streammusic.Home.HomeActivity;
 import com.chameleon.streammusic.Homenew.HomeNew;
 
 public class MainScreen extends AppCompatActivity {
@@ -22,15 +23,15 @@ public class MainScreen extends AppCompatActivity {
         FontsOverride.setDefaultFont(this,"MONOSPACE", "doppio_one.ttf");
         setContentView(R.layout.activity_main_screen);
 
-        tvsplash = (TextView) findViewById(R.id.tvsplash);
-        iv1 = (ImageView) findViewById(R.id.iv1);
+        tvsplash = findViewById(R.id.tvsplash);
+        iv1 = findViewById(R.id.iv1);
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.mytransition);
         tvsplash.startAnimation(myanim);
         iv1.startAnimation(myanim);
 //        iv2.startAnimation(myanim);
         //screen switching below
        // final Intent i = new Intent(this, ApiLogin.class);
-        final Intent i = new Intent(this, ApiLogin.class);
+        final Intent i = new Intent(this, HomeActivity.class);
 
 
         Thread Timer  = new Thread(){
