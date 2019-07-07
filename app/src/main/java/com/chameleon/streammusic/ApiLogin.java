@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.chameleon.streammusic.Home.HomeActivity;
+import com.chameleon.streammusic.Homenew.HomeNew;
 import com.chameleon.streammusic.data.model.outer;
 import com.chameleon.streammusic.data.remote.ApiUtils;
 import com.chameleon.streammusic.data.remote.UserClient;
@@ -36,12 +36,12 @@ public class ApiLogin extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mEmailField = (EditText) findViewById(R.id.entryEmailLog);
-        mPasswordField = (EditText) findViewById(R.id.entryPasswordLog);
+        mEmailField = findViewById(R.id.entryEmailLog);
+        mPasswordField = findViewById(R.id.entryPasswordLog);
 
-        mLoginButton = (Button) findViewById(R.id.buttonLogin);
-        mRegisterButton = (Button) findViewById(R.id.buttonSignUp);
-        mForgetPasswordButton = (Button) findViewById(R.id.buttonForget);
+        mLoginButton = findViewById(R.id.buttonLogin);
+        mRegisterButton = findViewById(R.id.buttonSignUp);
+        mForgetPasswordButton = findViewById(R.id.buttonForget);
 
         mAPIService = ApiUtils.getAPIService();
 
@@ -87,7 +87,7 @@ public class ApiLogin extends AppCompatActivity {
                     Log.i("MY :", "post submitted to API." + response.body().getOutput().getToken());
                     Toast.makeText(ApiLogin.this, "Response Successful!!", Toast.LENGTH_SHORT).show();
                     //spinner.setVisibility(View.GONE);
-                    Intent intent = new Intent(ApiLogin.this, HomeActivity.class);
+                    Intent intent = new Intent(ApiLogin.this, HomeNew.class);
                     intent.putExtra("token", response.body().getOutput().getToken());
                     startActivity(intent);
                 } else {
