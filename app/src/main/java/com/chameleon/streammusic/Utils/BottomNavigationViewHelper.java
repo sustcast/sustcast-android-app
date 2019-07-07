@@ -8,9 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.chameleon.streammusic.ApiLogout;
-import com.chameleon.streammusic.Favourites.feedback;
-import com.chameleon.streammusic.Homenew.HomeNew;
+import com.chameleon.streammusic.Home.Home;
 import com.chameleon.streammusic.R;
 import com.chameleon.streammusic.Search.RJ;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -37,7 +35,7 @@ public class BottomNavigationViewHelper {
                 switch (item.getItemId()){
 
                     case R.id.ic_house:
-                        Intent intent1 = new Intent(context, HomeNew.class);
+                        Intent intent1 = new Intent(context, Home.class);
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_search:
@@ -54,7 +52,7 @@ public class BottomNavigationViewHelper {
                     case R.id.ic_playlist:
                         final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.facebook.com/robotbakers/"));
                         context.startActivity(intent);
-                        /*Intent intent4 = new Intent(context, HomeNew.class);
+                        /*Intent intent4 = new Intent(context, Home.class);
                         context.startActivity(intent4);*/
                         break;
 

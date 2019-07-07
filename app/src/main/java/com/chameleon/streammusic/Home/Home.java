@@ -1,4 +1,4 @@
-package com.chameleon.streammusic.Homenew;
+package com.chameleon.streammusic.Home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +25,6 @@ import android.widget.Toast;
 import com.chameleon.streammusic.ApiLogin;
 import com.chameleon.streammusic.ChatActvity;
 import com.chameleon.streammusic.FontsOverride;
-import com.chameleon.streammusic.Home.HomeFragment;
-import com.chameleon.streammusic.Home.LiveFragment;
-import com.chameleon.streammusic.Home.SectionsPagerAdapter;
-import com.chameleon.streammusic.Home.TrendingFragment;
 import com.chameleon.streammusic.R;
 import com.chameleon.streammusic.Utils.BottomNavigationViewHelper;
 import com.chameleon.streammusic.credit_page;
@@ -47,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeNew extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
 
     static final String serverName = "103.84.159.230";
@@ -59,11 +55,11 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
     static Socket socket;
     final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
     final String userName = "shuhan";
-    private static final String TAG = "HomeNew";
+    private static final String TAG = "Home";
     private static final int ACTIVITY_NUM = 0;
     String token2;
 
-    private Context mContext = HomeNew.this;
+    private Context mContext = Home.this;
     private Button mLogout;
     private Button mChat;
     private UserClient mAPIService;
@@ -88,20 +84,20 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mLogout = findViewById(R.id.buttonLogout);
-        mChat = findViewById(R.id.buttonChat);
+        mLogout = (Button)findViewById(R.id.buttonLogout);
+        mChat = (Button) findViewById(R.id.buttonChat);
         mAPIService = ApiUtils.getAPIService();
         token2 = getIntent().getStringExtra("token");
         buttonFlag = 0;
         setupBottomNavigationView();
         setupViewPager();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_close, R.string.navigation_drawer_open);
         drawer.addDrawerListener(toggle);
@@ -121,7 +117,7 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
         });
         FontsOverride.setDefaultFont(this, "MONOSPACE", "doppio_one.ttf");
         setupBottomNavigationView();
-        drawer = findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
        /* final Button button = (Button) findViewById(R.id.floatplay);
@@ -157,10 +153,10 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
         adapter.addFragment(new HomeFragment());
         adapter.addFragment(new TrendingFragment());
 
-        ViewPager viewPager = findViewById(R.id.container);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Live");
@@ -169,7 +165,7 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
     }
 
     private void startChat() {
-        Intent intent = new Intent(HomeNew.this, ChatActvity.class);
+        Intent intent = new Intent(Home.this, ChatActvity.class);
         startActivity(intent);
     }
 
@@ -180,13 +176,13 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
                 System.out.println("Response code =>" + response.code());
                 Log.i("MY: ", "LOGOUT CLICKED");
                 if (response.isSuccessful()) {
-                    Toast.makeText(HomeNew.this, "Response Successful!! in general page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this, "Response Successful!! in general page", Toast.LENGTH_SHORT).show();
                     //spinner.setVisibility(View.GONE);
-                    Intent intent = new Intent(HomeNew.this, ApiLogin.class);
+                    Intent intent = new Intent(Home.this, ApiLogin.class);
                     startActivity(intent);
                 } else {
                     //spinner.setVisibility(View.GONE);
-                    Toast.makeText(HomeNew.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -194,7 +190,7 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
             @Override
             public void onFailure(Call<logoutResponse> call, Throwable t) {
                 // spinner.setVisibility(View.GONE);
-                Toast.makeText(HomeNew.this, "No Internet.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "No Internet.", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
             }
         });
@@ -211,7 +207,7 @@ public class HomeNew extends AppCompatActivity implements NavigationView.OnNavig
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
 

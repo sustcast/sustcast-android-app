@@ -30,7 +30,7 @@
         </activity>
         <activity android:name=".Search.RJ" />
         <activity android:name=".Favourites.feedback" />
-        <activity android:name=".Homenew.HomeNew" />
+        <activity android:name=".Home.Home" />
         <activity android:name=".Mood.Facebook" />
         <activity android:name=".credit_page" />
         <activity android:name=".ApiRegistration" />

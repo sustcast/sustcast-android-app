@@ -3,7 +3,6 @@ package com.chameleon.streammusic.Favourites;
 import android.content.Context;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.chameleon.streammusic.Homenew.HomeNew;
+import com.chameleon.streammusic.Home.Home;
 import com.chameleon.streammusic.R;
-import com.chameleon.streammusic.Search.RJ;
 import com.chameleon.streammusic.Utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -28,8 +26,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import static com.chameleon.streammusic.Search.RJ.client;
 
 
 public class feedback extends AppCompatActivity {
@@ -83,8 +79,8 @@ public class feedback extends AppCompatActivity {
         if(feedbackLog == null)
         {
             feedbackLog = "0";
-            preArtist = HomeNew.curArtist;
-            preSong = HomeNew.curSong;
+            preArtist = Home.curArtist;
+            preSong = Home.curSong;
 
             likeButton.setVisibility(View.VISIBLE);
             dislikeButton.setVisibility(View.VISIBLE);
@@ -97,14 +93,14 @@ public class feedback extends AppCompatActivity {
             public void run() {
 
                 try{
-                    if(feedbackLog.startsWith("0") && !(HomeNew.curGenre.startsWith("RJ") && HomeNew.curGenre.length() == 2))
+                    if(feedbackLog.startsWith("0") && !(Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2))
                     {
                         titleView.setText("You are Listening to:");
                         buttonTitle.setText("Was this the right time to play this kind of music?");
 
-                        songName.setText(HomeNew.curSong);
-                        artistName.setText("Artist: " + HomeNew.curArtist);
-                    } else if ( HomeNew.curGenre.startsWith("RJ") && HomeNew.curGenre.length() == 2 ){
+                        songName.setText(Home.curSong);
+                        artistName.setText("Artist: " + Home.curArtist);
+                    } else if ( Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2 ){
                         titleView.setText("Now our RJ is Talking");
                         buttonTitle.setText("");
 
@@ -125,20 +121,20 @@ public class feedback extends AppCompatActivity {
                         dislikeButton.setVisibility(View.INVISIBLE);
                     }
 
-                    if(!(HomeNew.curArtist.contains(preArtist) && HomeNew.curArtist.length() == preArtist.length() &&  HomeNew.curSong.contains(preSong) && HomeNew.curSong.length() == preSong.length() ))
+                    if(!(Home.curArtist.contains(preArtist) && Home.curArtist.length() == preArtist.length() &&  Home.curSong.contains(preSong) && Home.curSong.length() == preSong.length() ))
                     {
                         System.out.println("song changed");
                         feedbackLog = "0";
 
-                        preArtist = HomeNew.curArtist;
-                        preSong = HomeNew.curSong;
+                        preArtist = Home.curArtist;
+                        preSong = Home.curSong;
 
 
                         titleView.setText("You are Listening to:");
                         buttonTitle.setText("Was this the right time to play this kind of music?");
 
-                        songName.setText(HomeNew.curSong);
-                        artistName.setText(HomeNew.curArtist);
+                        songName.setText(Home.curSong);
+                        artistName.setText(Home.curArtist);
 
                         likeButton.setVisibility(View.VISIBLE);
                         dislikeButton.setVisibility(View.VISIBLE);
@@ -172,7 +168,7 @@ public class feedback extends AppCompatActivity {
                  dislikeButton.setVisibility(View.INVISIBLE);
 
                  if(T == null || !T.isAlive()) {
-                     client = new ClientThread("<FEEDBACK>"+token+"__"+HomeNew.curSong);
+                     client = new ClientThread("<FEEDBACK>"+token+"__"+ Home.curSong);
                      T = new Thread(client);
                      T.start();
                  }

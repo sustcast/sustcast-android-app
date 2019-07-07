@@ -55,10 +55,10 @@ public class ChatActvity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_chat);
-        buttonSend = findViewById(R.id.send);
-        listView = findViewById(R.id.msgview);
+        buttonSend = (ImageView) findViewById(R.id.send);
+        listView = (ListView) findViewById(R.id.msgview);
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.right);
-        chatText = findViewById(R.id.msg);
+        chatText = (EditText) findViewById(R.id.msg);
 
         if (ActivityCompat.checkSelfPermission(ChatActvity.this,
                 Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED | ActivityCompat.checkSelfPermission(ChatActvity.this,

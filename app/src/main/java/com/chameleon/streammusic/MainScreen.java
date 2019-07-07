@@ -3,13 +3,12 @@ package com.chameleon.streammusic;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chameleon.streammusic.Homenew.HomeNew;
+import com.chameleon.streammusic.Home.Home;
 
 public class MainScreen extends AppCompatActivity {
     private TextView tvsplash;
@@ -22,15 +21,15 @@ public class MainScreen extends AppCompatActivity {
         FontsOverride.setDefaultFont(this,"MONOSPACE", "doppio_one.ttf");
         setContentView(R.layout.activity_main_screen);
 
-        tvsplash = findViewById(R.id.tvsplash);
-        iv1 = findViewById(R.id.iv1);
+        tvsplash = (TextView) findViewById(R.id.tvsplash);
+        iv1 = (ImageView) findViewById(R.id.iv1);
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.mytransition);
         tvsplash.startAnimation(myanim);
         iv1.startAnimation(myanim);
 //        iv2.startAnimation(myanim);
         //screen switching below
        // final Intent i = new Intent(this, ApiLogin.class);
-        final Intent i = new Intent(this, ApiLogin.class);
+        final Intent i = new Intent(this, Home.class);
 
 
         Thread Timer  = new Thread(){
