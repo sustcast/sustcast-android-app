@@ -84,20 +84,20 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mLogout = (Button)findViewById(R.id.buttonLogout);
-        mChat = (Button) findViewById(R.id.buttonChat);
+        mLogout = findViewById(R.id.buttonLogout);
+        mChat = findViewById(R.id.buttonChat);
         mAPIService = ApiUtils.getAPIService();
         token2 = getIntent().getStringExtra("token");
         buttonFlag = 0;
         setupBottomNavigationView();
         setupViewPager();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_close, R.string.navigation_drawer_open);
         drawer.addDrawerListener(toggle);
@@ -117,7 +117,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
         FontsOverride.setDefaultFont(this, "MONOSPACE", "doppio_one.ttf");
         setupBottomNavigationView();
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
 
 
        /* final Button button = (Button) findViewById(R.id.floatplay);
@@ -153,10 +153,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         adapter.addFragment(new HomeFragment());
         adapter.addFragment(new TrendingFragment());
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Live");
@@ -207,7 +207,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
 
