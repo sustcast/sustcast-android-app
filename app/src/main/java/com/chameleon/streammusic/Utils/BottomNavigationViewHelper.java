@@ -9,12 +9,10 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.chameleon.streammusic.ApiLogout;
-import com.chameleon.streammusic.ChatActvity;
 import com.chameleon.streammusic.Favourites.feedback;
 import com.chameleon.streammusic.Homenew.HomeNew;
 import com.chameleon.streammusic.R;
 import com.chameleon.streammusic.Search.RJ;
-import com.chameleon.streammusic.data.remote.ApiUtils;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**
@@ -43,7 +41,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_search:
-                       Intent intent2 = new Intent(context, ChatActvity.class);
+                       Intent intent2 = new Intent(context, RJ.class);
                        context.startActivity(intent2);
 
                         break;

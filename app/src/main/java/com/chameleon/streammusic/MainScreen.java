@@ -9,7 +9,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chameleon.streammusic.Home.HomeActivity;
 import com.chameleon.streammusic.Homenew.HomeNew;
 
 public class MainScreen extends AppCompatActivity {
@@ -31,7 +30,7 @@ public class MainScreen extends AppCompatActivity {
 //        iv2.startAnimation(myanim);
         //screen switching below
        // final Intent i = new Intent(this, ApiLogin.class);
-        final Intent i = new Intent(this, HomeActivity.class);
+        final Intent i = new Intent(this, ApiLogin.class);
 
 
         Thread Timer  = new Thread(){

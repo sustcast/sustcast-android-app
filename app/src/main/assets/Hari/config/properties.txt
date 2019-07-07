@@ -1,8 +1,0 @@
-url:http://djustice-android.tumblr.com
-name:djMeow
-email:embers1010@gmail.com
-gender:male
-botmaster:appledora
-organization:team TGC
-version:0.0.1
-
