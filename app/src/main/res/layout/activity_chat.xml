@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#efefef"
     android:orientation="vertical"
-    tools:context=".ChatActvity">
+    tools:context="com.chameleon.sustcast.chatHandler.ChatActvity">
 
     <ListView
         android:id="@+id/msgview"

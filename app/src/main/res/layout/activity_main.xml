@@ -10,7 +10,7 @@
     android:paddingTop="10dp"
     android:paddingRight="20dp"
     android:paddingBottom="10dp"
-    tools:context="com.chameleon.streammusic.ApiLogin">
+    tools:context="com.chameleon.streammusic.com.chameleon.sustcast.authentication.ApiLogin">
 
 
     <ImageView

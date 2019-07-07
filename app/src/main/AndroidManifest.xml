@@ -18,24 +18,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChatActvity"></activity>
-        <activity android:name=".ApiLogout" />
-        <activity android:name=".ApiLogin" />
-        <activity android:name=".MainScreen">
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
+
+        <activity android:name="com.chameleon.sustcast.chatHandler.ChatActvity"></activity>
+        <activity android:name="com.chameleon.sustcast.authentication.ApiLogout" />
+        <activity android:name="com.chameleon.sustcast.authentication.ApiLogin" />
+        <activity android:name="com.chameleon.sustcast.MainScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Search.RJ" />
-        <activity android:name=".Favourites.feedback" />
-        <activity android:name=".Home.Home" />
-        <activity android:name=".Mood.Facebook" />
-        <activity android:name=".credit_page" />
-        <activity android:name=".ApiRegistration" />
-        <activity android:name=".resetPasswordActivity" />
-        <activity android:name=".newResetPassword" />
+        <activity android:name="com.chameleon.sustcast.favorites.feedback" />
+        <activity android:name="com.chameleon.sustcast.home.Home" />
+        <activity android:name="com.chameleon.sustcast.mood.Facebook" />
+        <activity android:name="com.chameleon.sustcast.credit.credit_page" />
+        <activity android:name="com.chameleon.sustcast.authentication.ApiRegistration" />
+        <activity android:name="com.chameleon.sustcast.authentication.resetPasswordActivity" />
+        <activity android:name="com.chameleon.sustcast.authentication.newResetPassword" />
     </application>
 
 </manifest>
