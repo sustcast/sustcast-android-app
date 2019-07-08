@@ -7,6 +7,7 @@ android {
         applicationId "com.chameleon.sustcast"
         minSdkVersion 16
         targetSdkVersion 26
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -38,9 +39,12 @@ dependencies {
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.1.9'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //api handling dependencies with chatpackages
+
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation 'com.squareup.okhttp3:okhttp:4.0.0'
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
 }

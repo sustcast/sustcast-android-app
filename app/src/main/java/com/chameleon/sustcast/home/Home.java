@@ -125,32 +125,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         setupBottomNavigationView();
         drawer = findViewById(R.id.drawer_layout);
 
-
-       /* final Button button = (Button) findViewById(R.id.floatplay);
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-
-                                      public void onClick(View v) {
-
-                                          if (buttonFlag == 0) buttonFlag = 1;
-                                          else buttonFlag = 0;
-
-                                          if (buttonFlag == 0) //button ta ase play mode e
-                                          {
-                                              button.setBackgroundResource(R.drawable.ic_play_circle_outline_black_24dp);
-                                          } else //button ta ase pause mode e
-                                          {
-                                              button.setBackgroundResource(R.drawable.ic_pause_circle_outline_black_24dp);
-
-                                          }
-                                      }
-
-
-                                  }
-        );*/
-
-
     }
 
     private void setupViewPager() {
