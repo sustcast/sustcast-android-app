@@ -2,14 +2,20 @@ package com.chameleon.sustcast.home;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.chameleon.streammusic.R;
 import com.google.android.gms.ads.AdRequest;
@@ -42,14 +48,26 @@ import java.util.ArrayList;
 
 public class LiveFragment extends Fragment {
     private static final String TAG = "Live Fragment";
-    private AdView mAdView;
+    ImageButton b_play;
+
+    MediaPlayer mediaPlayer;
+
+    boolean prepared = false;
+    boolean started = false;
+    String stream = "http://103.84.159.230:8000/sustcast";
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
 
-        mAdView = view.findViewById(R.id.adView);
+        b_play = (ImageButton) view.findViewById(R.id.playButton);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        new LiveFragment.PlayerTask().execute(stream);
+
+        AdView mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         CurrentSong();
@@ -71,6 +89,7 @@ public class LiveFragment extends Fragment {
                 }
             });
         }
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected Void doInBackground(String... params) {
 
@@ -109,9 +128,9 @@ public class LiveFragment extends Fragment {
                 BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), 8);
                 StringBuilder sBuilder = new StringBuilder();
 
-                String line = null;
+                String line;
                 while ((line = bReader.readLine()) != null) {
-                    sBuilder.append(line + "\n");
+                    sBuilder.append(line).append("\n");
                 }
 
                 inputStream.close();
@@ -157,4 +176,61 @@ public class LiveFragment extends Fragment {
             System.out.println(e.toString());
         }
     }
+    class PlayerTask extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                mediaPlayer.setDataSource(strings[0]);
+                mediaPlayer.prepare();
+                prepared = true;
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+            return prepared;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aboolean) {
+            super.onPostExecute(aboolean);
+            b_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mediaPlayer.isPlaying()) {
+                        b_play.setImageResource(R.drawable.ic_play);
+                        mediaPlayer.pause();
+                    }
+                    else{
+                        b_play.setImageResource(R.mipmap.ic_pause);
+                        mediaPlayer.start();
+                    }
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(started) {
+            mediaPlayer.pause();
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(started) {
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(prepared){
+            mediaPlayer.release();
+        }
+    }
+
 }

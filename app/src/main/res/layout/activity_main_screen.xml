@@ -10,7 +10,7 @@
     android:paddingTop="16dp"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
-    tools:context="com.chameleon.streammusic.com.chameleon.sustcast.MainScreen"
+    tools:context="com.chameleon.sustcast.MainScreen"
     android:background="#FFFFFF"
 >
 
