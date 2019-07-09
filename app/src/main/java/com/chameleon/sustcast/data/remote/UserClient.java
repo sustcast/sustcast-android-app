@@ -1,5 +1,6 @@
 package com.chameleon.sustcast.data.remote;
 
+import com.chameleon.sustcast.data.model.OuterXSL;
 import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.model.outer;
 import com.chameleon.sustcast.data.model.signupResponse;
@@ -16,7 +17,7 @@ import retrofit2.http.POST;
 public interface UserClient {
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("register")
+    @POST("api/register")
     Call<signupResponse> registerUser(@Field("name") String name,
                                       @Field("email") String email,
                                       @Field("password") String password,
@@ -28,25 +29,27 @@ public interface UserClient {
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("login")
+    @POST("api/login")
     Call<outer> signin(@Field("email") String email,
                        @Field("password") String password);
 
-    @GET("logout")
-    Call<logoutResponse> signout(@Header("Authorization") String token);
+    @GET("api/logout")
+    Call<logoutResponse>signout(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("password/create")
+    @POST("api/password/create")
     Call<JsonElement>requestReset(@Field("email") String email);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("password/reset")
+    @POST("api/password/reset")
     Call<JsonElement>resetPassword(@Field("email") String email,
                                    @Field("password") String password,
                                    @Field("c_password") String c_password,
                                    @Field("token") String token);
 
 
+   @GET("status-json.xsl")
+    Call<OuterXSL> fetch();
 }

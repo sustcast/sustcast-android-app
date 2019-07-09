@@ -16,8 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.chameleon.streammusic.R;
+import com.chameleon.sustcast.data.model.OuterXSL;
+import com.chameleon.sustcast.data.remote.ApiUtils;
+import com.chameleon.sustcast.data.remote.UserClient;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -32,6 +36,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,6 +46,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by HEMAYEET on 1/3/2018.
@@ -49,12 +60,15 @@ import java.util.ArrayList;
 public class LiveFragment extends Fragment {
     private static final String TAG = "Live Fragment";
     ImageButton b_play;
-
+    final static String stream = "http://103.84.159.230:8000/sustcast";
+    private UserClient mAPIService;
     MediaPlayer mediaPlayer;
+    private Timer autoUpdate;
+    TextView songName;
+    TextView artistName;
 
     boolean prepared = false;
     boolean started = false;
-    String stream = "http://103.84.159.230:8000/sustcast";
 
 
     @Nullable
@@ -63,119 +77,21 @@ public class LiveFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
 
         b_play = (ImageButton) view.findViewById(R.id.playButton);
+        AdView mAdView = view.findViewById(R.id.adView);
+        songName = view.findViewById(R.id.tv_song);
+        artistName = view.findViewById(R.id.tv_artist);
+
+        mAPIService = ApiUtils.getAPIService();
+
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         new LiveFragment.PlayerTask().execute(stream);
-
-        AdView mAdView = view.findViewById(R.id.adView);
+        catchMetadata();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        CurrentSong();
         return view;
     }
 
-    class MyAsyncTask extends AsyncTask<String, String, Void> {
-
-        private ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        InputStream inputStream = null;
-        String result = "";
-
-        protected void onPreExecute() {
-            progressDialog.setMessage("Downloading your data...");
-            progressDialog.show();
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface arg0) {
-                    MyAsyncTask.this.cancel(true);
-                }
-            });
-        }
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        protected Void doInBackground(String... params) {
-
-            String url_select = "http://103.84.159.230:8000/status-json.xsl";
-
-            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
-
-            try {
-                // Set up HTTP post
-
-                // HttpClient is more then less deprecated. Need to change to URLConnection
-                HttpClient httpClient = new DefaultHttpClient();
-
-                HttpPost httpPost = new HttpPost(url_select);
-                httpPost.setEntity(new UrlEncodedFormEntity(param));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-
-                // Read content & Log
-                inputStream = httpEntity.getContent();
-            } catch (UnsupportedEncodingException e1) {
-                Log.e("UnsupportedEncodExcept", e1.toString());
-                e1.printStackTrace();
-            } catch (ClientProtocolException e2) {
-                Log.e("ClientProtocolException", e2.toString());
-                e2.printStackTrace();
-            } catch (IllegalStateException e3) {
-                Log.e("IllegalStateException", e3.toString());
-                e3.printStackTrace();
-            } catch (IOException e4) {
-                Log.e("IOException", e4.toString());
-                e4.printStackTrace();
-            }
-            // Convert response to string using String Builder
-            try {
-                BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), 8);
-                StringBuilder sBuilder = new StringBuilder();
-
-                String line;
-                while ((line = bReader.readLine()) != null) {
-                    sBuilder.append(line).append("\n");
-                }
-
-                inputStream.close();
-                result = sBuilder.toString();
-
-            } catch (Exception e) {
-                Log.e("StringBuild BufferRead", "Error converting result " + e.toString());
-            }
-            return null;
-        } // protected Void doInBackground(String... params)
-        protected void onPostExecute(Void v) {
-            //parse JSON data
-            try {
-                JSONArray jArray = new JSONArray(result);
-                for(int i=0; i < jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    Log.i("TAG", jObject.toString());
-                } // End Loop
-                this.progressDialog.dismiss();
-            } catch (JSONException e) {
-                Log.e("JSONException", "Error: " + e.toString());
-            } // catch (JSONException e)
-        }
-
-    }
-
-    public void CurrentSong() {
-
-        try
-        {
-            URL url = new URL("http://103.84.159.230:8000/currentsong?sid=#");
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
-
-            in.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.toString());
-        }
-    }
     class PlayerTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -210,27 +126,54 @@ public class LiveFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(started) {
-            mediaPlayer.pause();
-        }
+
+    public void catchMetadata(){
+        mAPIService.fetch().enqueue(new Callback<OuterXSL>() {
+            @Override
+            public void onResponse(Call<OuterXSL> call, Response<OuterXSL> response) {
+                System.out.println("Response Code=>"+ response.code());
+                if(response.isSuccessful()){
+                    Log.i("Tag", "Response Metadata Received");
+                    Log.i("Tag","POST submitted to API"+ response.body().getIcestats().getSource().getTitle());
+                    String gotcha= response.body().getIcestats().getSource().getTitle();
+                    String[] separate = gotcha.split("-");
+                    String artist = separate[0];
+                    String song = separate[1];
+                    songName.setText(song);
+                    artistName.setText(artist);
+                }
+                else {
+                    Log.i("Tag","Failed to Receive Data");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OuterXSL> call, Throwable t) {
+                Log.i("Tag","Failed to catch data");
+            }
+        });
     }
+
+
     @Override
     public void onResume() {
         super.onResume();
-        if(started) {
-            mediaPlayer.start();
-        }
+        autoUpdate = new Timer();
+        autoUpdate.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateHTML();
+                    }
+                });
+            }
+        }, 0, 2000); // updates each 40 secs
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(prepared){
-            mediaPlayer.release();
-        }
+    private void updateHTML(){
+        catchMetadata();
     }
+
 
 }

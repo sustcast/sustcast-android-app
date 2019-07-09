@@ -138,7 +138,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/rl_progress"
         android:layout_centerHorizontal="true"
-        android:text="by From First to Last "
         android:textSize="14sp"
         android:textColor="@color/colorTextGrey" />
 
@@ -159,7 +158,6 @@
         android:layout_above="@id/tv_artist"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/space8"
-        android:text="Make War"
         android:textColor="@color/colorTextDark"
         android:textSize="18sp" />
 

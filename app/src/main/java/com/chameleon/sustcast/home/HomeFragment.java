@@ -18,6 +18,7 @@ import java.io.IOException;
 public class HomeFragment extends Fragment {
     private static final String TAG = "Home Fragment";
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -25,7 +26,6 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
 
 
 
