@@ -19,6 +19,7 @@ import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.authentication.ApiLogin;
 import com.chameleon.sustcast.data.model.OuterXSL;
 import com.chameleon.sustcast.data.remote.ApiUtils;
+import com.chameleon.sustcast.data.remote.IceClient;
 import com.chameleon.sustcast.data.remote.UserClient;
 import com.google.gson.GsonBuilder;
 
@@ -31,7 +32,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
     private static final String TAG = "Home Fragment";
     Button b_play;
-    private UserClient mAPIService;
+    private IceClient mAPIService;
 
 
     MediaPlayer mediaPlayer;
@@ -45,13 +46,14 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mAPIService = ApiUtils.getAPIService();
+        mAPIService = ApiUtils.getSongService();
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         new HomeFragment.PlayerTask().execute(stream);
-        catchMetadata();
+       catchMetadata();
         return view;
     }
+
 
     public void catchMetadata(){
         mAPIService.fetch().enqueue(new Callback<OuterXSL>() {
@@ -59,12 +61,16 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<OuterXSL> call, Response<OuterXSL> response) {
                 System.out.println("Response code =>" + response.code());
+               // System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
+
                 if (response.isSuccessful()) {
                     Log.i("MY", "Response Metadata successful");
                     Log.i("MY :", "post submitted to API." + response.body().getIcestats().getSource().getTitle());
 
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
+                    System.out.println("JSON => " +response.body());
+                    System.out.println("RESPONSE: " + response.toString());
 
                 }
 
@@ -81,6 +87,7 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
 
 
 

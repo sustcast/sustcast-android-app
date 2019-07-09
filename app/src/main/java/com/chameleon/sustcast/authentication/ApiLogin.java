@@ -97,7 +97,7 @@ public class ApiLogin extends AppCompatActivity {
                     Toast.makeText(ApiLogin.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
 
-                System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
+//                System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
 
             }
 

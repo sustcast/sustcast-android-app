@@ -17,7 +17,7 @@ import retrofit2.http.POST;
 public interface UserClient {
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("api/register")
+    @POST("register")
     Call<signupResponse> registerUser(@Field("name") String name,
                                       @Field("email") String email,
                                       @Field("password") String password,
@@ -29,27 +29,25 @@ public interface UserClient {
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("api/login")
+    @POST("login")
     Call<outer> signin(@Field("email") String email,
                        @Field("password") String password);
 
-    @GET("api/logout")
+    @GET("logout")
     Call<logoutResponse>signout(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("api/password/create")
+    @POST("password/create")
     Call<JsonElement>requestReset(@Field("email") String email);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
-    @POST("api/password/reset")
+    @POST("password/reset")
     Call<JsonElement>resetPassword(@Field("email") String email,
                                    @Field("password") String password,
                                    @Field("c_password") String c_password,
                                    @Field("token") String token);
 
 
-   @GET("status-json.xsl")
-    Call<OuterXSL> fetch();
 }
