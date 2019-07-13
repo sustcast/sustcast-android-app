@@ -14,6 +14,7 @@ package com.chameleon.sustcast.authentication;
         import com.chameleon.sustcast.data.model.signupResponse;
         import com.chameleon.sustcast.data.remote.ApiUtils;
         import com.chameleon.sustcast.data.remote.UserClient;
+        import com.google.gson.GsonBuilder;
 
         import retrofit2.Call;
         import retrofit2.Callback;
@@ -63,7 +64,7 @@ public class ApiRegistration extends AppCompatActivity {
                 String department = mDept.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(cpassword) && !TextUtils.isEmpty(registration_number) && !TextUtils.isEmpty(contact) && !TextUtils.isEmpty(department)) {
-                    spinner.setVisibility(View.VISIBLE);
+                    //spinner.setVisibility(View.VISIBLE);
                     startRegistration(name, email, password, cpassword, registration_number, contact, department);
                 }
 
@@ -79,17 +80,17 @@ public class ApiRegistration extends AppCompatActivity {
 
 
     private void startRegistration(String name, String email, String password, String c_password, String registration_number, String contact_number, String department) {
-        spinner.setVisibility(View.VISIBLE);
+        //spinner.setVisibility(View.VISIBLE);
         mAPIService.registerUser(name, email, password, c_password, registration_number, department, contact_number).enqueue(new Callback<signupResponse>() {
             @Override
             public void onResponse(Call<signupResponse> call, Response<signupResponse> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ApiRegistration.this, "Verification mail sent", Toast.LENGTH_LONG).show();
-                    spinner.setVisibility(View.GONE);
+                    //spinner.setVisibility(View.GONE);
                     Intent intent = new Intent(ApiRegistration.this, ApiLogin.class);
                     startActivity(intent);
                 } else {
-                    spinner.setVisibility(View.GONE);
+                    //spinner.setVisibility(View.GONE);
                     Toast.makeText(ApiRegistration.this, "Response Unsuccessful!", Toast.LENGTH_LONG).show();
                 }
 
@@ -98,9 +99,12 @@ public class ApiRegistration extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<signupResponse> call, Throwable t) {
-                spinner.setVisibility(View.GONE);
+                //spinner.setVisibility(View.GONE);
                 Toast.makeText(ApiRegistration.this, "Unable to complete registration", Toast.LENGTH_LONG).show();
                 t.printStackTrace();
+
+
+   //             System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
             }
         });
     }
