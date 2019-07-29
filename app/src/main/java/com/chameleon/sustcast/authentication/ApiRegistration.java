@@ -91,7 +91,7 @@ public class ApiRegistration extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                    // spinner.setVisibility(View.GONE);
-                    Toast.makeText(ApiRegistration.this, "Response Unsuccessful!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ApiRegistration.this, "Response Unsuccessful!", Toast.LENGTH_LONG).show();
                 }
 
                 //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
