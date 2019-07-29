@@ -1,0 +1,31 @@
+package com.chameleon.sustcast.data.remote;
+
+import android.util.Log;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class RetrofitCurrentClient {
+    private static Retrofit retrofit = null;
+
+    public static Retrofit getMeta(String baseUrl) {
+
+        Log.i("BASEURL: ", baseUrl);
+        if (retrofit==null) {
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(3, TimeUnit.MINUTES)
+                    .readTimeout(180, TimeUnit.SECONDS)
+                    .writeTimeout(180, TimeUnit.SECONDS)
+                    .build();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(okHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
+}
