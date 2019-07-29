@@ -156,7 +156,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 System.out.println("Response code =>" + response.code());
                 Log.i("MY: ", "LOGOUT CLICKED");
                 if (response.isSuccessful()) {
-                    Toast.makeText(Home.this, "Response Successful!! in general page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this, "Response Successful!! ", Toast.LENGTH_SHORT).show();
                     //spinner.setVisibility(View.GONE);
                     Intent intent = new Intent(Home.this, ApiLogin.class);
                     startActivity(intent);
