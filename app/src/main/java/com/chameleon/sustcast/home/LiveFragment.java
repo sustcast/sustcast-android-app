@@ -73,22 +73,20 @@ public class LiveFragment extends Fragment {
         mAPIService = ApiUtils.getMetadataService();
 
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        new LiveFragment.PlayerTask().execute(stream);
+        catchMetadata();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) ==
                     PackageManager.PERMISSION_GRANTED) {
-
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 circleBarVisualizer.setColor(ContextCompat.getColor(getActivity(), R.color.colorPink));
-                new LiveFragment.PlayerTask().execute(stream);
                 circleBarVisualizer.setPlayer(mediaPlayer.getAudioSessionId());
-                catchMetadata();
             } else {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
                     Toast.makeText(getActivity(), "App required access to audio", Toast.LENGTH_SHORT).show();
                 }
                 requestPermissions(WRITE_EXTERNAL_STORAGE_PERMS, AUDIO_PERMISSION_REQUEST_CODE);
             }
-
         } else {
             Log.e(TAG, "onCreateView: Dont");
         }

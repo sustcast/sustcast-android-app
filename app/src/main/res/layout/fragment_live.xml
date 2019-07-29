@@ -31,23 +31,15 @@
         android:textOff=""
         android:textOn="" />
 
-    <ImageView
-        android:id="@+id/cover_art"
-        android:layout_width="fill_parent"
-        android:layout_height="237dp"
-        android:layout_alignBottom="@+id/tv_song"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:src="@drawable/tameimpala" />
 
     <com.chibde.visualizer.CircleBarVisualizer
         android:id="@+id/visualizer"
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_width="match_parent"
-        android:layout_height="348dp" />
+        android:layout_marginTop="47dp"
+        android:layout_marginRight="2dp" />
 
     <LinearLayout
         android:id="@+id/ll_bottom"
