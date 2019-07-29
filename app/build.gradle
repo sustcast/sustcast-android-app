@@ -24,6 +24,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.firebase:firebase-ads:17.0.0'
+    implementation 'com.android.support:support-v4:26.0.0'
+    implementation 'com.chibde:audiovisualizer:2.1.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -45,6 +47,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation 'com.squareup.okhttp3:okhttp:4.0.0'
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
+    implementation 'com.chibde:audiovisualizer:2.1.0'
     implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
 }

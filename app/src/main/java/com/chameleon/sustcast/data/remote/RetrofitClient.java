@@ -2,8 +2,6 @@ package com.chameleon.sustcast.data.remote;
 
 
 
-import android.util.Log;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -15,8 +13,7 @@ public class RetrofitClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(String baseUrl) {
-
-        Log.i("BASEURL: ", baseUrl);
+        System.out.println("Retrofit client");
         if (retrofit==null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(5, TimeUnit.MINUTES)

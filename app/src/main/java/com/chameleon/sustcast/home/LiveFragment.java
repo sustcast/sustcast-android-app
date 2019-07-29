@@ -1,40 +1,41 @@
 package com.chameleon.sustcast.home;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
+import com.chameleon.sustcast.data.model.Current;
+import com.chameleon.sustcast.data.model.OuterCurrent;
+import com.chameleon.sustcast.data.remote.ApiUtils;
+import com.chameleon.sustcast.data.remote.CurrentClient;
+import com.chibde.visualizer.CircleBarVisualizer;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by HEMAYEET on 1/3/2018.
@@ -42,119 +43,163 @@ import java.util.ArrayList;
 
 public class LiveFragment extends Fragment {
     private static final String TAG = "Live Fragment";
-    private AdView mAdView;
+    ImageButton b_play;
+    final static String stream = "http://103.84.159.230:8000/sustcast";
+    private CurrentClient mAPIService;
+    MediaPlayer mediaPlayer;
+    private Timer autoUpdate;
+    TextView songName;
+    TextView artistName;
+    CircleBarVisualizer circleBarVisualizer;
+    public static final int AUDIO_PERMISSION_REQUEST_CODE = 102;
+    public static final String[] WRITE_EXTERNAL_STORAGE_PERMS = {
+            Manifest.permission.RECORD_AUDIO
+    };
+
+    boolean prepared = false;
+    boolean started = false;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
+        circleBarVisualizer = view.findViewById(R.id.visualizer);
+        b_play = (ImageButton) view.findViewById(R.id.playButton);
+        AdView mAdView = view.findViewById(R.id.adView);
+        songName = view.findViewById(R.id.tv_song);
+        artistName = view.findViewById(R.id.tv_artist);
 
-        mAdView = view.findViewById(R.id.adView);
+        mAPIService = ApiUtils.getMetadataService();
+
+        mediaPlayer = new MediaPlayer();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                circleBarVisualizer.setColor(ContextCompat.getColor(getActivity(), R.color.colorPink));
+                new LiveFragment.PlayerTask().execute(stream);
+                circleBarVisualizer.setPlayer(mediaPlayer.getAudioSessionId());
+                catchMetadata();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
+                    Toast.makeText(getActivity(), "App required access to audio", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(WRITE_EXTERNAL_STORAGE_PERMS, AUDIO_PERMISSION_REQUEST_CODE);
+            }
+
+        } else {
+            Log.e(TAG, "onCreateView: Dont");
+        }
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        CurrentSong();
         return view;
     }
 
-    class MyAsyncTask extends AsyncTask<String, String, Void> {
+    class PlayerTask extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... strings) {
 
-        private ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        InputStream inputStream = null;
-        String result = "";
+            try {
+                mediaPlayer.setDataSource(strings[0]);
+                mediaPlayer.prepare();
+                prepared = true;
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+            return prepared;
+        }
 
-        protected void onPreExecute() {
-            progressDialog.setMessage("Downloading your data...");
-            progressDialog.show();
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface arg0) {
-                    MyAsyncTask.this.cancel(true);
+        @Override
+        protected void onPostExecute(Boolean aboolean) {
+            super.onPostExecute(aboolean);
+            b_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mediaPlayer.isPlaying()) {
+                        b_play.setImageResource(R.drawable.ic_play);
+                        mediaPlayer.pause();
+                    }
+                    else{
+                        b_play.setImageResource(R.mipmap.ic_pause);
+                        mediaPlayer.start();
+                    }
                 }
             });
+
         }
-        @Override
-        protected Void doInBackground(String... params) {
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            String url_select = "http://103.84.159.230:8000/status-json.xsl";
-
-            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
-
-            try {
-                // Set up HTTP post
-
-                // HttpClient is more then less deprecated. Need to change to URLConnection
-                HttpClient httpClient = new DefaultHttpClient();
-
-                HttpPost httpPost = new HttpPost(url_select);
-                httpPost.setEntity(new UrlEncodedFormEntity(param));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-
-                // Read content & Log
-                inputStream = httpEntity.getContent();
-            } catch (UnsupportedEncodingException e1) {
-                Log.e("UnsupportedEncodExcept", e1.toString());
-                e1.printStackTrace();
-            } catch (ClientProtocolException e2) {
-                Log.e("ClientProtocolException", e2.toString());
-                e2.printStackTrace();
-            } catch (IllegalStateException e3) {
-                Log.e("IllegalStateException", e3.toString());
-                e3.printStackTrace();
-            } catch (IOException e4) {
-                Log.e("IOException", e4.toString());
-                e4.printStackTrace();
+        if (requestCode == AUDIO_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(),
+                        "Application will not have audio on record", Toast.LENGTH_SHORT).show();
             }
-            // Convert response to string using String Builder
-            try {
-                BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), 8);
-                StringBuilder sBuilder = new StringBuilder();
+        }
+    }
 
-                String line = null;
-                while ((line = bReader.readLine()) != null) {
-                    sBuilder.append(line + "\n");
+    public void catchMetadata(){
+        mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
+            @Override
+            public void onResponse(Call<OuterCurrent> call, Response<OuterCurrent> response) {
+                System.out.println("Response code =>" + response.code());
+                //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
+                if (response.isSuccessful()) {
+                    Log.i("MY", "Response Metadata successful");
+                    List<Current> currentList = response.body().getCurrent();
+                    String artist = currentList.get(0).getArtist();
+                    String songtitle = currentList.get(0).getSong();
+                    String genre = currentList.get(0).getGenre();
+                    String lyric = currentList.get(0).getLyric();
+                    Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
+                    String[] separate = songtitle.split("-");
+
+                    songName.setText(songtitle);
+                    artistName.setText(artist);
+
+                } else {
+                    Log.i("MY", "Response Metadata NOT successful");
+                    System.out.println("JSON => " +response.body());
+                    System.out.println("RESPONSE: " + response.toString());
+
                 }
 
-                inputStream.close();
-                result = sBuilder.toString();
 
-            } catch (Exception e) {
-                Log.e("StringBuild BufferRead", "Error converting result " + e.toString());
             }
-            return null;
-        } // protected Void doInBackground(String... params)
-        protected void onPostExecute(Void v) {
-            //parse JSON data
-            try {
-                JSONArray jArray = new JSONArray(result);
-                for(int i=0; i < jArray.length(); i++) {
-                    JSONObject jObject = jArray.getJSONObject(i);
-                    Log.i("TAG", jObject.toString());
-                } // End Loop
-                this.progressDialog.dismiss();
-            } catch (JSONException e) {
-                Log.e("JSONException", "Error: " + e.toString());
-            } // catch (JSONException e)
-        }
+
+            @Override
+            public void onFailure(Call<OuterCurrent> call, Throwable t) {
+                Log.i("MY", "Response Metadata FAILED");
+
+            }
+        });
 
     }
 
-    public void CurrentSong() {
 
-        try
-        {
-            URL url = new URL("http://103.84.159.230:8000/currentsong?sid=#");
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
-
-            in.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.toString());
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoUpdate = new Timer();
+        autoUpdate.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateHTML();
+                    }
+                });
+            }
+        }, 0, 2000); // updates each 40 secs
     }
+
+    private void updateHTML(){
+        catchMetadata();
+    }
+
+
 }
