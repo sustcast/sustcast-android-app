@@ -16,9 +16,9 @@ public class RetrofitClient {
         System.out.println("Retrofit client");
         if (retrofit==null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(1, TimeUnit.MINUTES)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .connectTimeout(5, TimeUnit.MINUTES)
+                    .readTimeout(5, TimeUnit.MINUTES)
+                    .writeTimeout(5, TimeUnit.MINUTES)
                     .build();
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

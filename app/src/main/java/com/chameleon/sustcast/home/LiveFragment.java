@@ -1,8 +1,6 @@
 package com.chameleon.sustcast.home;
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,47 +9,27 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
-import com.chameleon.sustcast.data.model.OuterXSL;
+import com.chameleon.sustcast.data.model.Current;
+import com.chameleon.sustcast.data.model.OuterCurrent;
 import com.chameleon.sustcast.data.remote.ApiUtils;
-import com.chameleon.sustcast.data.remote.UserClient;
+import com.chameleon.sustcast.data.remote.CurrentClient;
 import com.chibde.visualizer.CircleBarVisualizer;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -67,7 +45,7 @@ public class LiveFragment extends Fragment {
     private static final String TAG = "Live Fragment";
     ImageButton b_play;
     final static String stream = "http://103.84.159.230:8000/sustcast";
-    private UserClient mAPIService;
+    private CurrentClient mAPIService;
     MediaPlayer mediaPlayer;
     private Timer autoUpdate;
     TextView songName;
@@ -92,7 +70,7 @@ public class LiveFragment extends Fragment {
         songName = view.findViewById(R.id.tv_song);
         artistName = view.findViewById(R.id.tv_artist);
 
-        mAPIService = ApiUtils.getAPIService();
+        mAPIService = ApiUtils.getMetadataService();
 
         mediaPlayer = new MediaPlayer();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -165,30 +143,41 @@ public class LiveFragment extends Fragment {
     }
 
     public void catchMetadata(){
-        mAPIService.fetch().enqueue(new Callback<OuterXSL>() {
+        mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
             @Override
-            public void onResponse(Call<OuterXSL> call, Response<OuterXSL> response) {
-                System.out.println("Response Code=>"+ response.code());
-                if(response.isSuccessful()){
-                    Log.i("Tag", "Response Metadata Received");
-                    Log.i("Tag","POST submitted to API"+ response.body().getIcestats().getSource().getTitle());
-                    String gotcha= response.body().getIcestats().getSource().getTitle();
-                    String[] separate = gotcha.split("-");
-                    String artist = separate[0];
-                    String song = separate[1];
-                    songName.setText(song);
+            public void onResponse(Call<OuterCurrent> call, Response<OuterCurrent> response) {
+                System.out.println("Response code =>" + response.code());
+                //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
+                if (response.isSuccessful()) {
+                    Log.i("MY", "Response Metadata successful");
+                    List<Current> currentList = response.body().getCurrent();
+                    String artist = currentList.get(0).getArtist();
+                    String songtitle = currentList.get(0).getSong();
+                    String genre = currentList.get(0).getGenre();
+                    String lyric = currentList.get(0).getLyric();
+                    Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
+                    String[] separate = songtitle.split("-");
+
+                    songName.setText(songtitle);
                     artistName.setText(artist);
+
+                } else {
+                    Log.i("MY", "Response Metadata NOT successful");
+                    System.out.println("JSON => " +response.body());
+                    System.out.println("RESPONSE: " + response.toString());
+
                 }
-                else {
-                    Log.i("Tag","Failed to Receive Data");
-                }
+
+
             }
 
             @Override
-            public void onFailure(Call<OuterXSL> call, Throwable t) {
-                Log.i("Tag","Failed to catch data");
+            public void onFailure(Call<OuterCurrent> call, Throwable t) {
+                Log.i("MY", "Response Metadata FAILED");
+
             }
         });
+
     }
 
 

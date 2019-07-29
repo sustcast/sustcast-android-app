@@ -32,13 +32,13 @@ public class MainScreen extends AppCompatActivity {
 //        iv2.startAnimation(myanim);
         //screen switching below
        // final Intent i = new Intent(this, ApiLogin.class);
-        final Intent i = new Intent(this, Home.class);
+        final Intent i = new Intent(this, ApiLogin.class);
 
 
         Thread Timer  = new Thread(){
             public void run(){
                 try{
-                    sleep(5000);
+                    sleep(3000);
                 }
                 catch(InterruptedException e){
                     e.printStackTrace();
