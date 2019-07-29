@@ -1,15 +1,19 @@
 package com.chameleon.sustcast.home;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.data.model.OuterXSL;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
+import com.chibde.visualizer.CircleBarVisualizer;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -66,6 +72,11 @@ public class LiveFragment extends Fragment {
     private Timer autoUpdate;
     TextView songName;
     TextView artistName;
+    CircleBarVisualizer circleBarVisualizer;
+    public static final int AUDIO_PERMISSION_REQUEST_CODE = 102;
+    public static final String[] WRITE_EXTERNAL_STORAGE_PERMS = {
+            Manifest.permission.RECORD_AUDIO
+    };
 
     boolean prepared = false;
     boolean started = false;
@@ -75,7 +86,7 @@ public class LiveFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
-
+        circleBarVisualizer = view.findViewById(R.id.visualizer);
         b_play = (ImageButton) view.findViewById(R.id.playButton);
         AdView mAdView = view.findViewById(R.id.adView);
         songName = view.findViewById(R.id.tv_song);
@@ -84,9 +95,25 @@ public class LiveFragment extends Fragment {
         mAPIService = ApiUtils.getAPIService();
 
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        new LiveFragment.PlayerTask().execute(stream);
-        catchMetadata();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                circleBarVisualizer.setColor(ContextCompat.getColor(getActivity(), R.color.colorPink));
+                new LiveFragment.PlayerTask().execute(stream);
+                circleBarVisualizer.setPlayer(mediaPlayer.getAudioSessionId());
+                catchMetadata();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
+                    Toast.makeText(getActivity(), "App required access to audio", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(WRITE_EXTERNAL_STORAGE_PERMS, AUDIO_PERMISSION_REQUEST_CODE);
+            }
+
+        } else {
+            Log.e(TAG, "onCreateView: Dont");
+        }
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         return view;
@@ -125,7 +152,17 @@ public class LiveFragment extends Fragment {
 
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (requestCode == AUDIO_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(),
+                        "Application will not have audio on record", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     public void catchMetadata(){
         mAPIService.fetch().enqueue(new Callback<OuterXSL>() {

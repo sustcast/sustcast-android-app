@@ -42,6 +42,13 @@
         android:adjustViewBounds="true"
         android:src="@drawable/tameimpala" />
 
+    <com.chibde.visualizer.CircleBarVisualizer
+        android:id="@+id/visualizer"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:layout_height="348dp" />
+
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
