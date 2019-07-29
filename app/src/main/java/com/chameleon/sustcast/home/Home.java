@@ -140,7 +140,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setText("Live");
-        tabLayout.getTabAt(1).setText("Home");
+        tabLayout.getTabAt(1).setText("Lyrics");
         tabLayout.getTabAt(2).setText("Trending");
     }
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,8 @@ public class LiveFragment extends Fragment {
     private Timer autoUpdate;
     TextView songName;
     TextView artistName;
+    private ProgressBar progressBar;
+    private int progressStatus = 0;
     CircleBarVisualizer circleBarVisualizer;
     public static final int AUDIO_PERMISSION_REQUEST_CODE = 102;
     public static final String[] WRITE_EXTERNAL_STORAGE_PERMS = {
@@ -69,7 +72,7 @@ public class LiveFragment extends Fragment {
         AdView mAdView = view.findViewById(R.id.adView);
         songName = view.findViewById(R.id.tv_song);
         artistName = view.findViewById(R.id.tv_artist);
-
+        progressBar = view.findViewById(R.id.progressBar);
         mAPIService = ApiUtils.getMetadataService();
 
         mediaPlayer = new MediaPlayer();
@@ -153,12 +156,14 @@ public class LiveFragment extends Fragment {
                     String songtitle = currentList.get(0).getSong();
                     String genre = currentList.get(0).getGenre();
                     String lyric = currentList.get(0).getLyric();
-                    Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
+                    Double progress = currentList.get(0).getProgress();
+                    String some= Double.toString(progress);
+                    //Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
+                    Log.i("Progess", some);
                     String[] separate = songtitle.split("-");
-
                     songName.setText(songtitle);
                     artistName.setText(artist);
-
+                    progressBar.setProgress((int)Math.round(progress));
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
                     System.out.println("JSON => " +response.body());
@@ -166,9 +171,7 @@ public class LiveFragment extends Fragment {
 
                 }
 
-
             }
-
             @Override
             public void onFailure(Call<OuterCurrent> call, Throwable t) {
                 Log.i("MY", "Response Metadata FAILED");
@@ -192,7 +195,7 @@ public class LiveFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 2000); // updates each 40 secs
+        }, 0, 1000); // updates each 40 secs
     }
 
     private void updateHTML(){

@@ -12,24 +12,10 @@
     <item
         android:id="@+id/ic_search"
         android:icon="@drawable/logo_rj"
-        android:title="RJ">
+        android:title="Bot">
 
 
     </item>
-    <item
-        android:id="@+id/ic_heart"
-        android:icon="@drawable/happy"
-        android:title="Feedback">
-
-
-    </item>
-    <item
-        android:id="@+id/ic_playlist"
-        android:icon="@drawable/logo_fb"
-        android:title="Facebook">
-
-    </item>
-
     <item
         android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="Logout">

@@ -41,21 +41,7 @@ public class BottomNavigationViewHelper {
                     case R.id.ic_search:
                        Intent intent2 = new Intent(context, ChatActvity.class);
                        context.startActivity(intent2);
-
                         break;
-                    case R.id.ic_heart:
-                        /*Intent intent3 = new Intent(context, feedback.class);
-                        context.startActivity(intent3);*/
-                        //Snackbar.make(view, "Feature Under Construction", Snackbar.LENGTH_LONG)
-                          //      .setAction("Action", null).show();
-                        break;
-                    case R.id.ic_playlist:
-                        final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.facebook.com/robotbakers/"));
-                        context.startActivity(intent);
-                        /*Intent intent4 = new Intent(context, Home.class);
-                        context.startActivity(intent4);*/
-                        break;
-
 
                 }
 
