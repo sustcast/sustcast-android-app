@@ -8,10 +8,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitIceClient {
+public class RetrofitCurrentClient {
     private static Retrofit retrofit = null;
 
-    public static Retrofit getIce(String baseUrl) {
+    public static Retrofit getMeta(String baseUrl) {
 
         Log.i("BASEURL: ", baseUrl);
         if (retrofit==null) {

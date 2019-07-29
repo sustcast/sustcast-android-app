@@ -1,29 +1,25 @@
 package com.chameleon.sustcast.home;
 
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
-import com.chameleon.sustcast.authentication.ApiLogin;
-import com.chameleon.sustcast.data.model.OuterXSL;
+import com.chameleon.sustcast.data.model.Current;
+import com.chameleon.sustcast.data.model.OuterCurrent;
 import com.chameleon.sustcast.data.remote.ApiUtils;
-import com.chameleon.sustcast.data.remote.IceClient;
-import com.chameleon.sustcast.data.remote.UserClient;
-import com.google.gson.GsonBuilder;
+import com.chameleon.sustcast.data.remote.CurrentClient;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +28,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
     private static final String TAG = "Home Fragment";
     Button b_play;
-    private IceClient mAPIService;
+    private CurrentClient mAPIService;
 
 
     MediaPlayer mediaPlayer;
@@ -46,7 +42,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mAPIService = ApiUtils.getSongService();
+        mAPIService = ApiUtils.getMetadataService();
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         new HomeFragment.PlayerTask().execute(stream);
@@ -56,16 +52,19 @@ public class HomeFragment extends Fragment {
 
 
     public void catchMetadata(){
-        mAPIService.fetch().enqueue(new Callback<OuterXSL>() {
-
+        mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
             @Override
-            public void onResponse(Call<OuterXSL> call, Response<OuterXSL> response) {
+            public void onResponse(Call<OuterCurrent> call, Response<OuterCurrent> response) {
                 System.out.println("Response code =>" + response.code());
-               // System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
-
+                //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
                 if (response.isSuccessful()) {
                     Log.i("MY", "Response Metadata successful");
-                    Log.i("MY :", "post submitted to API." + response.body().getIcestats().getSource().getTitle());
+                    List<Current> currentList = response.body().getCurrent();
+                    String artist = currentList.get(0).getArtist();
+                    String songtitle = currentList.get(0).getSong();
+                    String genre = currentList.get(0).getGenre();
+                    String lyric = currentList.get(0).getLyric();
+                    Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
 
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
@@ -74,13 +73,11 @@ public class HomeFragment extends Fragment {
 
                 }
 
-               // System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
-
 
             }
 
             @Override
-            public void onFailure(Call<OuterXSL> call, Throwable t) {
+            public void onFailure(Call<OuterCurrent> call, Throwable t) {
                 Log.i("MY", "Response Metadata FAILED");
 
             }

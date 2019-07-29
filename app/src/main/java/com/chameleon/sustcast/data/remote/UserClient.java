@@ -1,6 +1,5 @@
 package com.chameleon.sustcast.data.remote;
 
-import com.chameleon.sustcast.data.model.OuterXSL;
 import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.model.outer;
 import com.chameleon.sustcast.data.model.signupResponse;
