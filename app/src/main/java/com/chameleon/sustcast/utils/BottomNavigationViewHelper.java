@@ -8,7 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.chameleon.sustcast.chatHandler.ChatActvity;
+import com.chameleon.sustcast.chatHandler.ChatActivity;
 import com.chameleon.sustcast.home.Home;
 import com.chameleon.streammusic.R;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -39,7 +39,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_search:
-                       Intent intent2 = new Intent(context, ChatActvity.class);
+                       Intent intent2 = new Intent(context, ChatActivity.class);
                        context.startActivity(intent2);
                         break;
 

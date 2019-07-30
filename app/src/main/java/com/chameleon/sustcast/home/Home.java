@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.chameleon.sustcast.authentication.ApiLogin;
-import com.chameleon.sustcast.chatHandler.ChatActvity;
+import com.chameleon.sustcast.chatHandler.ChatActivity;
 import com.chameleon.sustcast.fontOverride.FontsOverride;
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
@@ -145,7 +145,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void startChat() {
-        Intent intent = new Intent(Home.this, ChatActvity.class);
+        Intent intent = new Intent(Home.this, ChatActivity.class);
         startActivity(intent);
     }
 

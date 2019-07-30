@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/partyback"
     android:id="@+id/feedbackLayout"
-    tools:context="com.chameleon.streammusic.com.chameleon.sustcast.favorites.feedback">
+    tools:context="com.chameleon.sustcast.favorites.feedback">
 
     <RelativeLayout
         android:layout_width="match_parent"
