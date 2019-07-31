@@ -17,12 +17,11 @@
 
     </item>
     <item
+        android:id="@+id/ic_logout"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="Logout">
 
     </item>
-
-
 
 
 </menu>

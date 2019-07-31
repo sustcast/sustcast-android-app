@@ -15,7 +15,7 @@ public class RequestTask extends AsyncTask<AIRequest, Void, AIResponse> {
     private AIDataService aiDataService;
     private AIServiceContext customAIServiceContext;
 
-    RequestTask(Activity activity, AIDataService aiDataService, AIServiceContext customAIServiceContext){
+    RequestTask(Activity activity, AIDataService aiDataService, AIServiceContext customAIServiceContext) {
         this.activity = activity;
         this.aiDataService = aiDataService;
         this.customAIServiceContext = customAIServiceContext;
@@ -34,6 +34,6 @@ public class RequestTask extends AsyncTask<AIRequest, Void, AIResponse> {
 
     @Override
     protected void onPostExecute(AIResponse aiResponse) {
-        ((ChatActivity)activity).callback(aiResponse);
+        ((ChatActivity) activity).callback(aiResponse);
     }
 }

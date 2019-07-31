@@ -1,16 +1,12 @@
 package com.chameleon.sustcast.home;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,18 +14,25 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.data.model.Current;
 import com.chameleon.sustcast.data.model.OuterCurrent;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.CurrentClient;
-import com.chibde.visualizer.CircleBarVisualizer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,170 +40,159 @@ import java.util.TimerTask;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-/**
- * Created by HEMAYEET on 1/3/2018.
- */
+import retrofit2.internal.EverythingIsNonNull;
 
 public class LiveFragment extends Fragment {
-    private static final String TAG = "Live Fragment";
+
+
+    //Stream Link
+
+    final static String stream = "http://103.84.159.230:8000/sustcast?type=.mpeg";
+
+    //Layout Resources
+
     ImageButton b_play;
-    final static String stream = "http://103.84.159.230:8000/sustcast";
-    private CurrentClient mAPIService;
-    MediaPlayer mediaPlayer;
-    private Timer autoUpdate;
     TextView songName;
     TextView artistName;
+
+    //Instance Identifier
+
+    private CurrentClient mAPIService;
     private ProgressBar progressBar;
-    private int progressStatus = 0;
-    CircleBarVisualizer circleBarVisualizer;
-    public static final int AUDIO_PERMISSION_REQUEST_CODE = 102;
-    public static final String[] WRITE_EXTERNAL_STORAGE_PERMS = {
-            Manifest.permission.RECORD_AUDIO
-    };
+    private ProgressBar LoadingMusic;
+    private Context context;
 
-    boolean prepared = false;
-    boolean started = false;
+    //EXO
 
+    private SimpleExoPlayer mPlayer;
+    private Uri uri;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
-        circleBarVisualizer = view.findViewById(R.id.visualizer);
-        b_play = (ImageButton) view.findViewById(R.id.playButton);
-        AdView mAdView = view.findViewById(R.id.adView);
+
+        context = getContext();
+        //Resource Initializer
+        b_play = view.findViewById(R.id.playButton);
         songName = view.findViewById(R.id.tv_song);
         artistName = view.findViewById(R.id.tv_artist);
         progressBar = view.findViewById(R.id.progressBar);
+        AdView mAdView = view.findViewById(R.id.adView);
         mAPIService = ApiUtils.getMetadataService();
+        uri = Uri.parse(stream);
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        new LiveFragment.PlayerTask().execute(stream);
-        catchMetadata();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                circleBarVisualizer.setColor(ContextCompat.getColor(getActivity(), R.color.colorPink));
-                circleBarVisualizer.setPlayer(mediaPlayer.getAudioSessionId());
-            } else {
-                if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
-                    Toast.makeText(getActivity(), "App required access to audio", Toast.LENGTH_SHORT).show();
-                }
-                requestPermissions(WRITE_EXTERNAL_STORAGE_PERMS, AUDIO_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            Log.e(TAG, "onCreateView: Dont");
-        }
+        //Creates ExoPlayer instance
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        new LiveFragment.PlayerTask().execute();
+        catchMetadata();
         return view;
     }
+class PlayerTask extends AsyncTask<String,Void,Boolean> {
 
-    class PlayerTask extends AsyncTask<String, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(String... strings) {
-
-            try {
-                mediaPlayer.setDataSource(strings[0]);
-                mediaPlayer.prepare();
-                prepared = true;
-            }  catch (IOException e) {
-                e.printStackTrace();
-            }
-            return prepared;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aboolean) {
-            super.onPostExecute(aboolean);
-            b_play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(mediaPlayer.isPlaying()) {
-                        b_play.setImageResource(R.drawable.ic_play);
-                        mediaPlayer.pause();
-                    }
-                    else{
-                        b_play.setImageResource(R.mipmap.ic_pause);
-                        mediaPlayer.start();
-                    }
-                }
-            });
-
-        }
-    }
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == AUDIO_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getActivity(),
-                        "Application will not have audio on record", Toast.LENGTH_SHORT).show();
-            }
-        }
+    protected Boolean doInBackground(String... strings) {
+        mediaPlayerLaunch();
+        return null;
     }
 
-    public void catchMetadata(){
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        b_play.setOnClickListener(view -> {
+            if(isPlaying()) {
+                b_play.setImageResource(R.mipmap.ic_play_b);
+                pause();
+            }
+            else{
+                b_play.setImageResource(R.mipmap.ic_pause_b);
+                play();
+            }
+        });
+    }
+}
+
+public void catchMetadata() {
         mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
             @Override
-            public void onResponse(Call<OuterCurrent> call, Response<OuterCurrent> response) {
+            public void onResponse(@NotNull Call<OuterCurrent> call, @EverythingIsNonNull Response<OuterCurrent> response) {
                 System.out.println("Response code =>" + response.code());
-                //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
                 if (response.isSuccessful()) {
                     Log.i("MY", "Response Metadata successful");
                     List<Current> currentList = response.body().getCurrent();
                     String artist = currentList.get(0).getArtist();
                     String songtitle = currentList.get(0).getSong();
-                    String genre = currentList.get(0).getGenre();
-                    String lyric = currentList.get(0).getLyric();
                     Double progress = currentList.get(0).getProgress();
-                    String some= Double.toString(progress);
-                    //Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
+                    String some = Double.toString(progress);
                     Log.i("Progess", some);
-                    String[] separate = songtitle.split("-");
                     songName.setText(songtitle);
                     artistName.setText(artist);
-                    progressBar.setProgress((int)Math.round(progress));
+                    progressBar.setProgress((int) Math.round(progress));
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
-                    System.out.println("JSON => " +response.body());
+                    System.out.println("JSON => " + response.body());
                     System.out.println("RESPONSE: " + response.toString());
-
                 }
-
             }
             @Override
-            public void onFailure(Call<OuterCurrent> call, Throwable t) {
+            public void onFailure(@EverythingIsNonNull Call<OuterCurrent> call, Throwable t) {
                 Log.i("MY", "Response Metadata FAILED");
-
             }
         });
-
     }
-
-
+    private void mediaPlayerLaunch(){
+        mPlayer = ExoPlayerFactory.newSimpleInstance(context);
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+                Util.getUserAgent(context, "SUSTCast"));
+        MediaSource audioStream = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(uri);
+        mPlayer.prepare(audioStream);
+        mPlayer.setPlayWhenReady(true);
+    }
     @Override
     public void onResume() {
         super.onResume();
-        autoUpdate = new Timer();
+        Timer autoUpdate = new Timer();
         autoUpdate.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        updateHTML();
+                if(getActivity() != null){
+                    try{
+                getActivity().runOnUiThread(() -> updateHTML());}
+                    catch (Exception e){
+                        e.printStackTrace();
                     }
-                });
+                }
             }
-        }, 0, 1000); // updates each 40 secs
+        }, 0, 1000); // updates each 1 sec
+
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
     }
 
-    private void updateHTML(){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPlayer.release();
+    }
+    private boolean isPlaying() {
+        return mPlayer != null
+                && mPlayer.getPlaybackState() != Player.STATE_ENDED
+                && mPlayer.getPlaybackState() != Player.STATE_IDLE
+                && mPlayer.getPlayWhenReady();
+    }
+    public void pause(){
+        mPlayer.setPlayWhenReady(false);
+        mPlayer.getPlaybackState();
+    }
+    public void play(){
+        mPlayer.setPlayWhenReady(true);
+        mPlayer.getPlaybackState();
+    }
+    private void updateHTML() {
         catchMetadata();
     }
-
-
 }

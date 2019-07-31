@@ -33,20 +33,20 @@ public interface UserClient {
                        @Field("password") String password);
 
     @GET("logout")
-    Call<logoutResponse>signout(@Header("Authorization") String token);
+    Call<logoutResponse> signout(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
     @POST("password/create")
-    Call<JsonElement>requestReset(@Field("email") String email);
+    Call<JsonElement> requestReset(@Field("email") String email);
 
     @FormUrlEncoded
     @Headers("X-Requested-With:XMLHttpRequest")
     @POST("password/reset")
-    Call<JsonElement>resetPassword(@Field("email") String email,
-                                   @Field("password") String password,
-                                   @Field("c_password") String c_password,
-                                   @Field("token") String token);
+    Call<JsonElement> resetPassword(@Field("email") String email,
+                                    @Field("password") String password,
+                                    @Field("c_password") String c_password,
+                                    @Field("token") String token);
 
 
 }

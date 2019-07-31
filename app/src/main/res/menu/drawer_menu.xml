@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_rateus"
+        <item
+            android:id="@+id/nav_rateus"
             android:icon="@drawable/logo_rate"
-            android:title="Rate"/>
-        <item android:id="@+id/nav_credits"
+            android:title="Rate" />
+        <item
+            android:id="@+id/nav_credits"
             android:icon="@drawable/logo_credit"
-            android:title="Credit"/>
+            android:title="Credit" />
     </group>
 </menu>

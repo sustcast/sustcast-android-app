@@ -70,7 +70,9 @@ public class newResetPassword extends AppCompatActivity {
                     Toast.makeText(newResetPassword.this, "Response Successful!! You can now login with new credentials!", Toast.LENGTH_SHORT).show();
                     spinner.setVisibility(View.GONE);
                     Intent intent = new Intent(newResetPassword.this, ApiLogin.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    finish();
                 } else {
                     spinner.setVisibility(View.GONE);
                     Toast.makeText(newResetPassword.this, "Response Unsuccessful!!", Toast.LENGTH_SHORT).show();

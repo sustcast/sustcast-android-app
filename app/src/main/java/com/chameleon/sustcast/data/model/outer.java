@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 public class outer {
 
 
-
     @SerializedName("output")
     @Expose
     private Output Output;

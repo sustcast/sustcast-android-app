@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -18,19 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.chameleon.sustcast.authentication.ApiLogin;
-import com.chameleon.sustcast.chatHandler.ChatActivity;
-import com.chameleon.sustcast.fontOverride.FontsOverride;
 import com.chameleon.streammusic.R;
-import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
+import com.chameleon.sustcast.authentication.ApiLogin;
 import com.chameleon.sustcast.credit.credit_page;
-import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
+import com.chameleon.sustcast.fontOverride.FontsOverride;
+import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
+import com.google.android.gms.ads.AdView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.DataInputStream;
@@ -39,67 +33,57 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    DrawerLayout drawer;
-
-    private AdView mAdView;
     static final String serverName = "103.84.159.230";
     static final int port = 50002;
-    static OutputStream outToServer;
-    public static DataOutputStream out;
-    static InputStream inFromServer;
-    public static DataInputStream in;
-    static Socket socket;
-    final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
-    final String userName = "shuhan";
     private static final String TAG = "Home";
     private static final int ACTIVITY_NUM = 0;
-    String token2;
-
-    private Context mContext = Home.this;
-    private Button mLogout;
-    private Button mChat;
-    private UserClient mAPIService;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton btnCart;
-    CoordinatorLayout coordinatorLayout;
-
-
-    //new code added from radiomeowv2
-    int buttonFlag;
-    String url = "http://103.84.159.230:8000/sustcast";
-
-    static int mediaGenjam = 50;
-
+    public static DataOutputStream out;
+    public static DataInputStream in;
+    public static String token2;
     public static String curSong;
     public static String curArtist;
     public static String curGenre;
     public static String curLyric;
+    public static String className;
+    static OutputStream outToServer;
+    static InputStream inFromServer;
+    static Socket socket;
+    static int mediaGenjam = 50;
+    final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
+    final String userName = "shuhan";
+    DrawerLayout drawer;
+    //new code added from radiomeowv2
+    int buttonFlag;
+    String url = "http://103.84.159.230:8000/sustcast";
+    private AdView mAdView;
+    private Context mContext = Home.this;
+    private Button mChat;
+    private UserClient mAPIService;
+
+    public static String getClassName() {
+        return className;
+    }
+
+    public static String getToken() {
+        return token2;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        mLogout = findViewById(R.id.buttonLogout);
-        mChat = findViewById(R.id.buttonChat);
         mAPIService = ApiUtils.getAPIService();
         token2 = getIntent().getStringExtra("token");
+        Log.d("FAG", "onCreate: Token2" + token2);
         buttonFlag = 0;
         setupBottomNavigationView();
         setupViewPager();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        className = this.getClass().getName();
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -109,18 +93,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
-        mChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startChat();
-            }
-        });
         FontsOverride.setDefaultFont(this, "MONOSPACE", "doppio_one.ttf");
         setupBottomNavigationView();
         drawer = findViewById(R.id.drawer_layout);
@@ -144,38 +116,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         tabLayout.getTabAt(2).setText("Trending");
     }
 
-    private void startChat() {
-        Intent intent = new Intent(Home.this, ChatActivity.class);
-        startActivity(intent);
-    }
-
-    private void logout() {
-        mAPIService.signout("Bearer " + token2).enqueue(new Callback<logoutResponse>() {
-            @Override
-            public void onResponse(Call<logoutResponse> call, Response<logoutResponse> response) {
-                System.out.println("Response code =>" + response.code());
-                Log.i("MY: ", "LOGOUT CLICKED");
-                if (response.isSuccessful()) {
-                    Toast.makeText(Home.this, "Response Successful!! ", Toast.LENGTH_SHORT).show();
-                    //spinner.setVisibility(View.GONE);
-                    Intent intent = new Intent(Home.this, ApiLogin.class);
-                    startActivity(intent);
-                } else {
-                    //spinner.setVisibility(View.GONE);
-                    Toast.makeText(Home.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<logoutResponse> call, Throwable t) {
-                // spinner.setVisibility(View.GONE);
-                Toast.makeText(Home.this, "No Internet.", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
-            }
-        });
-    }
-
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -194,9 +134,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

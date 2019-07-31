@@ -1,38 +1,21 @@
 package com.chameleon.sustcast.home;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.data.model.Current;
 import com.chameleon.sustcast.data.model.OuterCurrent;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.CurrentClient;
-import com.chibde.visualizer.CircleBarVisualizer;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,9 +30,9 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "Home Fragment";
+    TextView lyrics_text;
     private CurrentClient mAPIService;
     private Timer autoUpdate;
-    TextView lyrics_text;
 
     @Nullable
     @Override
@@ -63,7 +46,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void catchMetadata(){
+    public void catchMetadata() {
         mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
             @Override
             public void onResponse(Call<OuterCurrent> call, Response<OuterCurrent> response) {
@@ -77,19 +60,20 @@ public class HomeFragment extends Fragment {
                     String genre = currentList.get(0).getGenre();
                     String lyric = currentList.get(0).getLyric();
                     Double progress = currentList.get(0).getProgress();
-                    String some= Double.toString(progress);
+                    String some = Double.toString(progress);
                     //Log.i("MY", "ARTIST here => "+ currentList.get(0).getLyric());
                     Log.i("Progess", some);
                     String[] separate = songtitle.split("-");
                     lyrics_text.setText(lyric);
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
-                    System.out.println("JSON => " +response.body());
+                    System.out.println("JSON => " + response.body());
                     System.out.println("RESPONSE: " + response.toString());
 
                 }
 
             }
+
             @Override
             public void onFailure(Call<OuterCurrent> call, Throwable t) {
                 Log.i("MY", "Response Metadata FAILED");
@@ -105,16 +89,16 @@ public class HomeFragment extends Fragment {
         autoUpdate.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        updateHTML();
-                    }
-                });
+                try {
+                    getActivity().runOnUiThread(() -> updateHTML());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 0, 5000); // updates each 40 secs
     }
 
-    private void updateHTML(){
+    private void updateHTML() {
         catchMetadata();
     }
 

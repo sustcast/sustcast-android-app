@@ -2,7 +2,6 @@ package com.chameleon.sustcast.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,13 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.chameleon.sustcast.fontOverride.FontsOverride;
-import com.chameleon.sustcast.home.Home;
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.data.model.outer;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
-import com.google.gson.GsonBuilder;
+import com.chameleon.sustcast.fontOverride.FontsOverride;
+import com.chameleon.sustcast.home.Home;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,7 +89,9 @@ public class ApiLogin extends AppCompatActivity {
                     //spinner.setVisibility(View.GONE);
                     Intent intent = new Intent(ApiLogin.this, Home.class);
                     intent.putExtra("token", response.body().getOutput().getToken());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    finish();
                 } else {
                     //spinner.setVisibility(View.GONE);
                     Toast.makeText(ApiLogin.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
@@ -118,17 +118,5 @@ public class ApiLogin extends AppCompatActivity {
 
     }
 
-
-    public void onFacebook(View view) {
-
-        Snackbar.make(view, "Prototype Stage. Click on Login to proceed.", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
-    public void onGoogle(View view) {
-
-        Snackbar.make(view, "Prototype Stage. Click on Login to proceed.", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
 
 }

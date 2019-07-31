@@ -50,12 +50,15 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.0.1'
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
-    implementation 'com.chibde:audiovisualizer:2.1.0'
+    implementation 'com.gauravk.audiovisualizer:audiovisualizer:0.9.2'
     implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
 
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.9.6'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.9.6'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.6'
     implementation 'ai.api:sdk:2.0.7@aar'
     implementation 'ai.api:libai:1.6.12'
 

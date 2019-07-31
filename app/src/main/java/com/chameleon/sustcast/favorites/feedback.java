@@ -1,10 +1,10 @@
 package com.chameleon.sustcast.favorites;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.chameleon.sustcast.home.Home;
 import com.chameleon.streammusic.R;
+import com.chameleon.sustcast.home.Home;
 import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -30,33 +30,28 @@ import java.util.Queue;
 
 public class feedback extends AppCompatActivity {
 
-    private static final String TAG = "Feedback";
-    private static final int ACTIVITY_NUM = 2;
-    private Context mContext = feedback.this;
-
-
     static final String serverName = "103.84.159.230"; //
     static final int port = 50001;
-    static OutputStream outToServer;
+    private static final String TAG = "Feedback";
+    private static final int ACTIVITY_NUM = 2;
     public static DataOutputStream out;
-    static InputStream inFromServer;
     public static DataInputStream in;
-    static Socket socket;
-    final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
-    final String userName = "puhi";
     public static ClientThread client;
     public static Thread T;
+    static OutputStream outToServer;
+    static InputStream inFromServer;
+    static Socket socket;
     static int msgFlg = 0;
-    final Queue recieveMsg = new LinkedList();
-
     static boolean active = false;
-
     static String preSong;
     static String preArtist;
     static String preGenre;
     static String feedbackLog;
-
+    final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
+    final String userName = "puhi";
+    final Queue recieveMsg = new LinkedList();
     CoordinatorLayout coordinatorLayout;
+    private Context mContext = feedback.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +71,7 @@ public class feedback extends AppCompatActivity {
         final TextView buttonTitle = findViewById(R.id.txt1);
 
 
-        if(feedbackLog == null)
-        {
+        if (feedbackLog == null) {
             feedbackLog = "0";
             preArtist = Home.curArtist;
             preSong = Home.curSong;
@@ -92,15 +86,14 @@ public class feedback extends AppCompatActivity {
             @Override
             public void run() {
 
-                try{
-                    if(feedbackLog.startsWith("0") && !(Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2))
-                    {
+                try {
+                    if (feedbackLog.startsWith("0") && !(Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2)) {
                         titleView.setText("You are Listening to:");
                         buttonTitle.setText("Was this the right time to play this kind of music?");
 
                         songName.setText(Home.curSong);
                         artistName.setText("Artist: " + Home.curArtist);
-                    } else if ( Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2 ){
+                    } else if (Home.curGenre.startsWith("RJ") && Home.curGenre.length() == 2) {
                         titleView.setText("Now our RJ is Talking");
                         buttonTitle.setText("");
 
@@ -109,8 +102,7 @@ public class feedback extends AppCompatActivity {
 
                         likeButton.setVisibility(View.INVISIBLE);
                         dislikeButton.setVisibility(View.INVISIBLE);
-                    }
-                    else {
+                    } else {
                         titleView.setText("Thanks for your feedback.");
                         buttonTitle.setText("");
 
@@ -121,8 +113,7 @@ public class feedback extends AppCompatActivity {
                         dislikeButton.setVisibility(View.INVISIBLE);
                     }
 
-                    if(!(Home.curArtist.contains(preArtist) && Home.curArtist.length() == preArtist.length() &&  Home.curSong.contains(preSong) && Home.curSong.length() == preSong.length() ))
-                    {
+                    if (!(Home.curArtist.contains(preArtist) && Home.curArtist.length() == preArtist.length() && Home.curSong.contains(preSong) && Home.curSong.length() == preSong.length())) {
                         System.out.println("song changed");
                         feedbackLog = "0";
 
@@ -140,50 +131,20 @@ public class feedback extends AppCompatActivity {
                         dislikeButton.setVisibility(View.VISIBLE);
                     }
 
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     System.out.println(e + " in feedback");
                 }
 
-                if(active)
+                if (active)
                     handler.postDelayed(this, 1000);
             }
         };
         handler.postDelayed(runnable, 10);
 
         likeButton.setOnClickListener(new View.OnClickListener() {
-             public void onClick(View v) {
-
-                 System.out.println("user liked it");
-
-                 feedbackLog = "1";
-
-                 titleView.setText("Thanks for your feedback.");
-                 buttonTitle.setText("");
-
-                 songName.setText("");
-                 artistName.setText("");
-
-                 likeButton.setVisibility(View.INVISIBLE);
-                 dislikeButton.setVisibility(View.INVISIBLE);
-
-                 if(T == null || !T.isAlive()) {
-                     client = new ClientThread("<FEEDBACK>"+token+"__"+ Home.curSong);
-                     T = new Thread(client);
-                     T.start();
-                 }
-                 else
-                 {
-                     System.out.println("bipod");
-                 }
-             }
-             }
-        );
-
-        dislikeButton.setOnClickListener(new View.OnClickListener() {
                                           public void onClick(View v) {
 
-                                              System.out.println("user disliked it");
+                                              System.out.println("user liked it");
 
                                               feedbackLog = "1";
 
@@ -195,15 +156,41 @@ public class feedback extends AppCompatActivity {
 
                                               likeButton.setVisibility(View.INVISIBLE);
                                               dislikeButton.setVisibility(View.INVISIBLE);
+
+                                              if (T == null || !T.isAlive()) {
+                                                  client = new ClientThread("<FEEDBACK>" + token + "__" + Home.curSong);
+                                                  T = new Thread(client);
+                                                  T.start();
+                                              } else {
+                                                  System.out.println("bipod");
+                                              }
                                           }
                                       }
+        );
+
+        dislikeButton.setOnClickListener(new View.OnClickListener() {
+                                             public void onClick(View v) {
+
+                                                 System.out.println("user disliked it");
+
+                                                 feedbackLog = "1";
+
+                                                 titleView.setText("Thanks for your feedback.");
+                                                 buttonTitle.setText("");
+
+                                                 songName.setText("");
+                                                 artistName.setText("");
+
+                                                 likeButton.setVisibility(View.INVISIBLE);
+                                                 dislikeButton.setVisibility(View.INVISIBLE);
+                                             }
+                                         }
         );
 
     }
 
 
-
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
@@ -227,15 +214,24 @@ public class feedback extends AppCompatActivity {
         active = false;
     }
 
+    String recieve() {
+        String str = "";
+        if (!recieveMsg.isEmpty())
+            str = (String) recieveMsg.remove();
+
+        return str;
+    }
+
     class ClientThread implements Runnable {
 
         Queue sendMsg = new LinkedList();
         String input, output;
         String query;
-        ClientThread(String query)
-        {
+
+        ClientThread(String query) {
             this.query = query;
         }
+
         @Override
         public void run() {
             try {
@@ -250,7 +246,7 @@ public class feedback extends AppCompatActivity {
 
                 out.writeUTF(query);
 
-                while (in.available() <= 0);
+                while (in.available() <= 0) ;
 
                 input = in.readUTF();
                 recieveMsg.offer(input);
@@ -265,14 +261,5 @@ public class feedback extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
-
-    String recieve()
-    {
-        String str = "";
-        if(!recieveMsg.isEmpty())
-            str = (String) recieveMsg.remove();
-
-        return str;
     }
 }

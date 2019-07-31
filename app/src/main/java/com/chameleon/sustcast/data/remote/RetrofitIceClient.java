@@ -14,7 +14,7 @@ public class RetrofitIceClient {
     public static Retrofit getIce(String baseUrl) {
 
         Log.i("BASEURL: ", baseUrl);
-        if (retrofit==null) {
+        if (retrofit == null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(1, TimeUnit.MINUTES)
                     .readTimeout(30, TimeUnit.SECONDS)

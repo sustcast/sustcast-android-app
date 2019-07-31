@@ -3,7 +3,6 @@
     xmlns:android1="http://schemas.android.com/tools">
 
 
-
     <item
         android:id="@+id/clear"
         android:orderInCategory="1"
@@ -11,27 +10,23 @@
         android1:showAsAction="never" />
 
 
-
     <item
         android:id="@+id/help"
-        android:title="help"
-        android1:showAsAction="never"
         android:orderInCategory="2"
-    />
+        android:title="help"
+        android1:showAsAction="never" />
 
     <item
         android:id="@+id/about"
-        android:title="about"
-        android1:showAsAction="never"
         android:orderInCategory="3"
-        />
+        android:title="about"
+        android1:showAsAction="never" />
 
     <item
         android:id="@+id/exit"
-        android:title="exit"
-        android1:showAsAction="never"
         android:orderInCategory="4"
-    />
+        android:title="exit"
+        android1:showAsAction="never" />
 
 
 </menu>

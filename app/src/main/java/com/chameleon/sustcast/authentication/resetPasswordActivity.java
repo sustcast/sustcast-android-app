@@ -69,7 +69,9 @@ public class resetPasswordActivity extends AppCompatActivity {
                         spinner.setVisibility(View.GONE);
                         Toast.makeText(resetPasswordActivity.this, "Password reset link sent.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(resetPasswordActivity.this, newResetPassword.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        finish();
 
                     }
                 } else {

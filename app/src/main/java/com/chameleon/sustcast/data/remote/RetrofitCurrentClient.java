@@ -14,7 +14,7 @@ public class RetrofitCurrentClient {
     public static Retrofit getMeta(String baseUrl) {
 
         Log.i("BASEURL: ", baseUrl);
-        if (retrofit==null) {
+        if (retrofit == null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(3, TimeUnit.MINUTES)
                     .readTimeout(180, TimeUnit.SECONDS)
