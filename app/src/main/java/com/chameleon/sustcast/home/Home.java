@@ -50,7 +50,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static InputStream inFromServer;
     static Socket socket;
     static int mediaGenjam = 50;
-    final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
+    private final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
     final String userName = "shuhan";
     DrawerLayout drawer;
     //new code added from radiomeowv2
@@ -103,7 +103,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new LiveFragment());
         adapter.addFragment(new HomeFragment());
-        adapter.addFragment(new TrendingFragment());
 
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
@@ -113,7 +112,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         tabLayout.getTabAt(0).setText("Live");
         tabLayout.getTabAt(1).setText("Lyrics");
-        tabLayout.getTabAt(2).setText("Trending");
     }
 
     public void onBackPressed() {

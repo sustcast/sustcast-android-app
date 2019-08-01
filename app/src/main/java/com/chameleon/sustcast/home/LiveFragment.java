@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,13 +56,16 @@ public class LiveFragment extends Fragment {
     ImageButton b_play;
     TextView songName;
     TextView artistName;
-
+    TextView lyricsView;
     //Instance Identifier
 
     private CurrentClient mAPIService;
     private ProgressBar progressBar;
     private ProgressBar LoadingMusic;
     private Context context;
+    private Handler mHandler;
+    private int mInterval;
+    private View view;
 
     //EXO
 
@@ -70,23 +75,29 @@ public class LiveFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live, container, false);
+            view = inflater.inflate(R.layout.fragment_live, container, false);
 
-        context = getContext();
-        //Resource Initializer
-        b_play = view.findViewById(R.id.playButton);
-        songName = view.findViewById(R.id.tv_song);
-        artistName = view.findViewById(R.id.tv_artist);
-        progressBar = view.findViewById(R.id.progressBar);
-        AdView mAdView = view.findViewById(R.id.adView);
-        mAPIService = ApiUtils.getMetadataService();
-        uri = Uri.parse(stream);
+            context = getContext();
 
-        //Creates ExoPlayer instance
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        new LiveFragment.PlayerTask().execute();
-        catchMetadata();
+            //Resource Initializer
+            b_play = view.findViewById(R.id.playButton);
+            songName = view.findViewById(R.id.tv_song);
+            artistName = view.findViewById(R.id.tv_artist);
+            progressBar = view.findViewById(R.id.progressBar);
+            AdView mAdView = view.findViewById(R.id.adView);
+            lyricsView =view.findViewById(R.id.lyricsView);
+            mAPIService = ApiUtils.getMetadataService();
+            uri = Uri.parse(stream);
+            mInterval = 1000;
+            lyricsView.setMovementMethod(new ScrollingMovementMethod());
+            setRetainInstance(true);
+            //Creates ExoPlayer instance
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+            new LiveFragment.PlayerTask().execute();
+            mHandler = new Handler();
+            catchMetadata();
+            startRepeatingTask();
         return view;
     }
 class PlayerTask extends AsyncTask<String,Void,Boolean> {
@@ -113,7 +124,7 @@ class PlayerTask extends AsyncTask<String,Void,Boolean> {
     }
 }
 
-public void catchMetadata() {
+    public void catchMetadata() {
         mAPIService.fetch().enqueue(new Callback<OuterCurrent>() {
             @Override
             public void onResponse(@NotNull Call<OuterCurrent> call, @EverythingIsNonNull Response<OuterCurrent> response) {
@@ -124,10 +135,12 @@ public void catchMetadata() {
                     String artist = currentList.get(0).getArtist();
                     String songtitle = currentList.get(0).getSong();
                     Double progress = currentList.get(0).getProgress();
+                    String lyric = currentList.get(0).getLyric();
                     String some = Double.toString(progress);
-                    Log.i("Progess", some);
+                    Log.i("Progress", some);
                     songName.setText(songtitle);
                     artistName.setText(artist);
+                    lyricsView.setText(lyric);
                     progressBar.setProgress((int) Math.round(progress));
                 } else {
                     Log.i("MY", "Response Metadata NOT successful");
@@ -141,6 +154,26 @@ public void catchMetadata() {
             }
         });
     }
+
+    private void startRepeatingTask(){
+        mStatusChecker.run();
+    }
+    private void stopRepeatingTask(){
+        mHandler.removeCallbacks(mStatusChecker);
+    }
+
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                updateHTML();
+            }
+            finally {
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            }
+        }
+    };
+
     private void mediaPlayerLaunch(){
         mPlayer = ExoPlayerFactory.newSimpleInstance(context);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
@@ -153,31 +186,25 @@ public void catchMetadata() {
     @Override
     public void onResume() {
         super.onResume();
-        Timer autoUpdate = new Timer();
-        autoUpdate.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(getActivity() != null){
-                    try{
-                getActivity().runOnUiThread(() -> updateHTML());}
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, 0, 1000); // updates each 1 sec
-
     }
     @Override
     public void onPause(){
         super.onPause();
+        mPlayer.seekTo(0);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mPlayer.release();
+        stopRepeatingTask();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
     private boolean isPlaying() {
         return mPlayer != null
                 && mPlayer.getPlaybackState() != Player.STATE_ENDED
@@ -189,6 +216,7 @@ public void catchMetadata() {
         mPlayer.getPlaybackState();
     }
     public void play(){
+        mPlayer.seekTo(0);
         mPlayer.setPlayWhenReady(true);
         mPlayer.getPlaybackState();
     }

@@ -30,7 +30,7 @@ public class MainScreen extends AppCompatActivity {
         tvsplash.startAnimation(myanim);
         iv1.startAnimation(myanim);
 
-        final Intent i = new Intent(this, Home.class);
+        final Intent i = new Intent(this, ApiLogin.class);
 
 
         Thread Timer = new Thread() {
