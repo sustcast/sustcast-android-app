@@ -9,9 +9,6 @@
     <color name="themeColor">#00B3FF</color>
     <color name="darkColor">#003754</color>
     <color name="colorGrey">#D3D3D3</color>
-    <color name="colorPink">#F3716C</color>
     <color name="colorTextDark">#636363</color>
     <color name="colorTextGrey">#66484848</color>
-    <color name="colorButtonDark">#4B4B4B</color>
-    <color name="colorButtonGrey">#424242</color>
 </resources>

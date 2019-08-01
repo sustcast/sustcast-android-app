@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chameleon.streammusic">
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.chameleon.streammusic"
+    tools:ignore="GoogleAppIndexingWarning"
+    >
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -30,9 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.chameleon.sustcast.favorites.feedback" />
         <activity android:name="com.chameleon.sustcast.home.Home" />
-        <activity android:name="com.chameleon.sustcast.mood.Facebook" />
         <activity android:name="com.chameleon.sustcast.credit.credit_page" />
         <activity android:name="com.chameleon.sustcast.authentication.ApiRegistration" />
         <activity android:name="com.chameleon.sustcast.authentication.resetPasswordActivity" />

@@ -2,6 +2,9 @@ package com.chameleon.sustcast.chatHandler;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+
+import com.chameleon.sustcast.home.ChatFragment;
 
 import ai.api.AIServiceContext;
 import ai.api.AIServiceException;

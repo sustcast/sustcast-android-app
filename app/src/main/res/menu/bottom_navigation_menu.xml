@@ -10,7 +10,7 @@
 
     </item>
     <item
-        android:id="@+id/ic_search"
+        android:id="@+id/ic_chat"
         android:icon="@drawable/logo_rj"
         android:title="Bot">
 

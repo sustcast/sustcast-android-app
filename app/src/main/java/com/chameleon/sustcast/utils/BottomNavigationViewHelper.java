@@ -36,65 +36,53 @@ public class BottomNavigationViewHelper {
         bottomNavigationViewEx.setTextVisibility(true);
     }
 
-    public static void enableNavigation(final Context context, final BottomNavigationViewEx view) {
-        view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-
-                    case R.id.ic_house:
+    public static void enableNavigation(final Context context, String className, final BottomNavigationViewEx view) {
+        view.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.ic_house:
+                    if(className != null) {
+                        if (className.equals(Home.class.getName()))
+                            break;
+                    }
                         Intent intent = new Intent(context, Home.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
-
-
                         break;
-                    case R.id.ic_search:
-                        Intent intent_ = new Intent(context, ChatActivity.class);
-                        intent_.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent_.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.startActivity(intent_);
-                        break;
-                    case R.id.ic_logout:
-                        UserClient mAPIService;
-                        mAPIService = ApiUtils.getAPIService();
-                        String tokenHere = Home.getToken();
-                        Log.d("FAG", "onCreate: TokenHere" + tokenHere);
-                        mAPIService.signout("Bearer " + tokenHere).enqueue(new Callback<logoutResponse>() {
-                            @Override
-                            public void onResponse(Call<logoutResponse> call, Response<logoutResponse> response) {
-                                System.out.println("Response code =>" + response.code());
-                                Log.i("MY: ", "LOGOUT CLICKED");
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(context, "Response Successful!! ", Toast.LENGTH_SHORT).show();
-                                    //spinner.setVisibility(View.GONE);
-                                    String className = Home.getClassName();
-                                    Intent intent = new Intent(context, ApiLogin.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    context.startActivity(intent);
-                                } else {
-                                    //spinner.setVisibility(View.GONE);
-                                    Toast.makeText(context, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
-                                }
-
+                case R.id.ic_chat:
+                    Intent intent_ = new Intent(context, ChatActivity.class);
+                    context.startActivity(intent_);
+                    break;
+                case R.id.ic_logout:
+                    UserClient mAPIService;
+                    mAPIService = ApiUtils.getAPIService();
+                    String tokenHere = Home.getToken();
+                    Log.d("FAG", "onCreate: TokenHere" + tokenHere);
+                    mAPIService.signout("Bearer " + tokenHere).enqueue(new Callback<logoutResponse>() {
+                        @Override
+                        public void onResponse(Call<logoutResponse> call, Response<logoutResponse> response) {
+                            System.out.println("Response code =>" + response.code());
+                            Log.i("MY: ", "LOGOUT CLICKED");
+                            if (response.isSuccessful()) {
+                                Toast.makeText(context, "Response Successful!! ", Toast.LENGTH_SHORT).show();
+                                //spinner.setVisibility(View.GONE);
+                                String className = Home.getClassName();
+                                Intent intent = new Intent(context, ApiLogin.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                context.startActivity(intent);
+                            } else {
+                                //spinner.setVisibility(View.GONE);
+                                Toast.makeText(context, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
                             }
-
-                            @Override
-                            public void onFailure(Call<logoutResponse> call, Throwable t) {
-                                // spinner.setVisibility(View.GONE);
-                                Toast.makeText(context, "No Internet.", Toast.LENGTH_SHORT).show();
-                                t.printStackTrace();
-                            }
-                        });
-                }
-
-
-                return false;
+                        }
+                        @Override
+                        public void onFailure(Call<logoutResponse> call, Throwable t) {
+                            // spinner.setVisibility(View.GONE);
+                            Toast.makeText(context, "No Internet.", Toast.LENGTH_SHORT).show();
+                            t.printStackTrace();
+                        }
+                    });
             }
+            return false;
         });
-
-
     }
 }

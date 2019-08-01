@@ -5,10 +5,6 @@
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
 
-    <string name="username">998PJs2zhNm-Zp-2Ps6rYRon9ZTxy4y_rXTIcIDLoBKv</string>
-    <string name="password">f6f9c65b-f53a-4707-b6d8-12e15d60b2d0</string>
-    <string name="url">https://gateway.watsonplatform.net/assistant/api</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="fragmentLive" >Live Fragment</string>
 
 </resources>

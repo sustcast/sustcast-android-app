@@ -19,6 +19,7 @@ import android.widget.Button;
 
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.authentication.ApiLogin;
+import com.chameleon.sustcast.chatHandler.ChatActivity;
 import com.chameleon.sustcast.credit.credit_page;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
@@ -27,33 +28,12 @@ import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
 import com.google.android.gms.ads.AdView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    static final String serverName = "103.84.159.230";
-    static final int port = 50002;
     private static final String TAG = "Home";
     private static final int ACTIVITY_NUM = 0;
-    public static DataOutputStream out;
-    public static DataInputStream in;
     public static String token2;
-    public static String curSong;
-    public static String curArtist;
-    public static String curGenre;
-    public static String curLyric;
     public static String className;
-    static OutputStream outToServer;
-    static InputStream inFromServer;
-    static Socket socket;
-    static int mediaGenjam = 50;
-    private final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
-    final String userName = "shuhan";
     DrawerLayout drawer;
-    //new code added from radiomeowv2
     int buttonFlag;
     String url = "http://103.84.159.230:8000/sustcast";
     private AdView mAdView;
@@ -85,7 +65,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         className = this.getClass().getName();
 
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,7 +81,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new LiveFragment());
-        adapter.addFragment(new HomeFragment());
+        adapter.addFragment(new ChatFragment());
 
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
@@ -127,7 +106,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, getClassName(), bottomNavigationViewEx);
 
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
@@ -148,10 +127,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             return false;
         }
         if (id == R.id.nav_credits) {
-            startActivity(new Intent(getApplicationContext(), credit_page.class));
+            startActivity(new Intent(getApplicationContext(), ChatActivity.class));
         } else if (id == R.id.nav_rateus) {
             startActivity(new Intent(getApplicationContext(), ApiLogin.class));
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

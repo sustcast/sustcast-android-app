@@ -12,6 +12,7 @@ import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.authentication.ApiLogin;
 import com.chameleon.sustcast.fontOverride.FontsOverride;
 import com.chameleon.sustcast.home.Home;
+import com.google.android.gms.common.api.Api;
 
 public class MainScreen extends AppCompatActivity {
     private TextView tvsplash;
@@ -36,7 +37,7 @@ public class MainScreen extends AppCompatActivity {
         Thread Timer = new Thread() {
             public void run() {
                 try {
-                    sleep(500);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
 
