@@ -1,9 +1,11 @@
 package com.chameleon.sustcast.data.remote;
 
+import com.chameleon.sustcast.data.model.OuterUser;
 import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.model.outer;
 import com.chameleon.sustcast.data.model.signupResponse;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -47,6 +49,10 @@ public interface UserClient {
                                     @Field("password") String password,
                                     @Field("c_password") String c_password,
                                     @Field("token") String token);
+
+    @Headers("Content-Type:application/json")
+    @GET("details")
+    Call<OuterUser> getName(@Header("Authorization") String token);
 
 
 }

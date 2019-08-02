@@ -19,6 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
+import com.chameleon.sustcast.data.model.RequestModel;
+import com.chameleon.sustcast.data.model.RequestResponseModel;
+import com.chameleon.sustcast.data.remote.ApiUtils;
+import com.chameleon.sustcast.data.remote.CurrentClient;
+import com.chameleon.sustcast.home.Home;
 import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -30,19 +35,24 @@ import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
-public class ChatActivity extends AppCompatActivity {
+public class  ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
     private static final int USER = 10001;
     private static final int BOT = 10002;
     private static final int ACTIVITY_NUM = 1;
+    private String secret = "shihabektanoobgamer123890shihabgay#NOOB";
     AIRequest aiRequest;
     AIDataService aiDataService;
     private EditText queryEditText;
     private String uuid = UUID.randomUUID().toString();
     private AIServiceContext customAIServiceContext;
     private LinearLayout chatLayout;
+    private CurrentClient mAPIService;
     private Context mContext = ChatActivity.this;
 
 
@@ -58,7 +68,7 @@ public class ChatActivity extends AppCompatActivity {
         scrollview.post(() -> scrollview.fullScroll(ScrollView.FOCUS_DOWN));
 
         chatLayout = findViewById(R.id.chatLayout);
-
+        mAPIService = ApiUtils.getMetadataService();
         ImageView sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(this::sendMessage);
 
@@ -110,6 +120,33 @@ public class ChatActivity extends AppCompatActivity {
             botReply = response[0];
             if (response.length > 1) {
                 Log.d(TAG, "Bot Reply: " + botReply + response[1] + response[2]);
+                String song = response[1];
+                String artist = response[2];
+                String name = Home.getUserName();
+                Log.i(TAG,song+" "+artist+" "+name);
+
+
+                mAPIService.requestMusic(new RequestModel(secret,name,song,artist)).enqueue(new Callback<RequestResponseModel>() {
+                    @Override
+                    public void onResponse(Call<RequestResponseModel> call, Response<RequestResponseModel> response) {
+                        System.out.println("Response code =>" + response.code());
+                        if (response.code() == 404){
+                            Log.i("Error code 400",response.errorBody().toString());
+                        }
+                        if(response.isSuccessful()){
+                            Log.i(TAG,"response request successful"+ response.body());
+                        }
+
+                        else{
+                            Log.i(TAG,"response request unsuccessful");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RequestResponseModel> call, Throwable t) {
+                            Log.i(TAG,"response REQUEST FAILED");
+                    }
+                });
             }
             showTextView(botReply, BOT);
         } else {
