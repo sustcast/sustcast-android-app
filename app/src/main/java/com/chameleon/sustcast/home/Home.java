@@ -21,6 +21,8 @@ import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.authentication.ApiLogin;
 import com.chameleon.sustcast.chatHandler.ChatActivity;
 import com.chameleon.sustcast.credit.credit_page;
+import com.chameleon.sustcast.data.model.OuterUser;
+import com.chameleon.sustcast.data.model.User;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
 import com.chameleon.sustcast.fontOverride.FontsOverride;
@@ -28,11 +30,26 @@ import com.chameleon.sustcast.utils.BottomNavigationViewHelper;
 import com.google.android.gms.ads.AdView;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "Home";
     private static final int ACTIVITY_NUM = 0;
     public static String token2;
     public static String className;
+    static OutputStream outToServer;
+    static InputStream inFromServer;
+    static Socket socket;
+    static int mediaGenjam = 50;
+    private final String token = "siojdioajs21839712987391872ahsdhkjshkjdh21983912doiasoidoias";
     DrawerLayout drawer;
     int buttonFlag;
     String url = "http://103.84.159.230:8000/sustcast";
@@ -40,6 +57,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private Context mContext = Home.this;
     private Button mChat;
     private UserClient mAPIService;
+    private static String userName;
 
     public static String getClassName() {
         return className;
@@ -75,8 +93,33 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         FontsOverride.setDefaultFont(this, "MONOSPACE", "doppio_one.ttf");
         setupBottomNavigationView();
         drawer = findViewById(R.id.drawer_layout);
+        fetchUsername();
 
     }
+
+    private void fetchUsername() {
+        mAPIService.getName("Bearer " + token2).enqueue(new Callback<OuterUser>() {
+            @Override
+            public void onResponse(Call<OuterUser> call, Response<OuterUser> response) {
+                System.out.println("Response code =>" + response.code());
+                if(response.isSuccessful()){
+                    User user = response.body().getUser();
+                    Log.i(TAG, "getname successful" +user.getName().toString());
+                    userName = user.getName().toString();
+                }
+
+                else {
+                    Log.i(TAG, "response getname unsuccessful");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OuterUser> call, Throwable t) {
+                    Log.i(TAG,"GETNAME FAILED");
+            }
+        });
+    }
+
 
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -133,6 +176,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public static String getUserName(){
+        return  userName;
     }
 
 
