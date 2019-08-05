@@ -2,6 +2,7 @@ package com.chameleon.sustcast.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.se.omapi.Session;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
 import com.chameleon.sustcast.authentication.ApiLogin;
+import com.chameleon.sustcast.authentication.SessionManager;
 import com.chameleon.sustcast.chatHandler.ChatActivity;
 import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.remote.ApiUtils;
@@ -28,6 +30,7 @@ import retrofit2.Response;
 public class BottomNavigationViewHelper {
     private static final String TAG = "BottomNavigationViewHel";
 
+
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx) {
         Log.d(TAG, "setupBottomNavigationView: SettingupBottomNavigationView");
         bottomNavigationViewEx.enableAnimation(false);
@@ -44,18 +47,18 @@ public class BottomNavigationViewHelper {
                         if (className.equals(Home.class.getName()))
                             break;
                     }
-                        Intent intent = new Intent(context, Home.class);
-                        context.startActivity(intent);
-                        break;
+                    Intent intent = new Intent(context, Home.class);
+                    context.startActivity(intent);
+                    break;
                 case R.id.ic_chat:
                     Intent intent_ = new Intent(context, ChatActivity.class);
                     context.startActivity(intent_);
                     break;
                 case R.id.ic_logout:
-                    UserClient mAPIService;
+                   /* UserClient mAPIService;
                     mAPIService = ApiUtils.getAPIService();
                     String tokenHere = Home.getToken();
-                    Log.d("FAG", "onCreate: TokenHere" + tokenHere);
+                    Log.d(TAG, " Token Here" + tokenHere);
                     mAPIService.signout("Bearer " + tokenHere).enqueue(new Callback<logoutResponse>() {
                         @Override
                         public void onResponse(Call<logoutResponse> call, Response<logoutResponse> response) {
@@ -63,7 +66,6 @@ public class BottomNavigationViewHelper {
                             Log.i("MY: ", "LOGOUT CLICKED");
                             if (response.isSuccessful()) {
                                 Toast.makeText(context, "Response Successful!! ", Toast.LENGTH_SHORT).show();
-                                //spinner.setVisibility(View.GONE);
                                 String className = Home.getClassName();
                                 Intent intent = new Intent(context, ApiLogin.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -80,7 +82,7 @@ public class BottomNavigationViewHelper {
                             Toast.makeText(context, "No Internet.", Toast.LENGTH_SHORT).show();
                             t.printStackTrace();
                         }
-                    });
+                    });*/
             }
             return false;
         });

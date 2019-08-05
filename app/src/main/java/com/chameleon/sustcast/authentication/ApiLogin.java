@@ -1,6 +1,8 @@
 package com.chameleon.sustcast.authentication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chameleon.streammusic.R;
+import com.chameleon.sustcast.data.model.logoutResponse;
 import com.chameleon.sustcast.data.model.outer;
 import com.chameleon.sustcast.data.remote.ApiUtils;
 import com.chameleon.sustcast.data.remote.UserClient;
@@ -28,6 +31,9 @@ public class ApiLogin extends AppCompatActivity {
     private Button mRegisterButton;
     private Button mForgetPasswordButton;
     private UserClient mAPIService;
+    private  static String token;
+    private static final String TAG = "ApiLogin";
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +50,15 @@ public class ApiLogin extends AppCompatActivity {
         mForgetPasswordButton = findViewById(R.id.buttonForget);
 
         mAPIService = ApiUtils.getAPIService();
+        session = new SessionManager(getApplicationContext());
+        Log.i(TAG,"LoginStatus: "+ session.isLoggedIn());
 
-        // setContentView(R.layout.activity_homenew);
-
+        if(session.isLoggedIn() == true){
+            Intent intent = new Intent(ApiLogin.this, Home.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,7 +66,6 @@ public class ApiLogin extends AppCompatActivity {
                 String password = mPasswordField.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-                    //spinner.setVisibility(View.VISIBLE);
                     startSignIn(email, password);
                 } else {
                     Toast.makeText(ApiLogin.this, "Field empty", Toast.LENGTH_SHORT).show();
@@ -84,20 +95,23 @@ public class ApiLogin extends AppCompatActivity {
             public void onResponse(Call<outer> call, Response<outer> response) {
                 System.out.println("Response code =>" + response.code());
                 if (response.isSuccessful()) {
-                    Log.i("MY :", "post submitted to API." + response.body().getOutput().getToken());
+                    Log.i(TAG, "post submitted to API." + response.body().getOutput().getToken());
                     Toast.makeText(ApiLogin.this, "Response Successful!!", Toast.LENGTH_SHORT).show();
-                    //spinner.setVisibility(View.GONE);
+
+                    token = response.body().getOutput().getToken();
+                    session.createLoginSession(token);
+
+                    Log.i(TAG,"SIGNIN token: "+ token);
+
                     Intent intent = new Intent(ApiLogin.this, Home.class);
                     intent.putExtra("token", response.body().getOutput().getToken());
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 } else {
-                    //spinner.setVisibility(View.GONE);
                     Toast.makeText(ApiLogin.this, "Response Unsuccessful", Toast.LENGTH_SHORT).show();
                 }
 
-                //System.out.println("JSON => " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
 
             }
 
@@ -117,6 +131,7 @@ public class ApiLogin extends AppCompatActivity {
         startActivity(i);
 
     }
+
 
 
 }
